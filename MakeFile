@@ -1,0 +1,2 @@
+run:
+	/home/benra/Projects/Flutter/beta/bin/flutter run -d chrome 
