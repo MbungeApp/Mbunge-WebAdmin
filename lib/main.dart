@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_maps/flutter_google_maps.dart';
+import 'package:mbungedashboard/screens/home.dart';
 import 'package:mbungedashboard/screens/login.dart';
 import 'package:mbungedashboard/utils/colors.dart';
 
 void main() {
+  GoogleMap.init('AIzaSyDtmRctuTX-b6FaDn5VMBDg9UEXSN_93XQ');
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -17,7 +21,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: AppColors.whiteColor,
       ),
-      home: LoginPage(),
+      home: HomePage(),
     );
   }
 }

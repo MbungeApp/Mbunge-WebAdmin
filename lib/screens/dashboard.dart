@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_maps/flutter_google_maps.dart';
 
-class DashboarHome extends StatelessWidget {
+class DashboarHome extends StatefulWidget {
   const DashboarHome({
     Key key,
   }) : super(key: key);
+
+  @override
+  _DashboarHomeState createState() => _DashboarHomeState();
+}
+
+class _DashboarHomeState extends State<DashboarHome> {
+  GlobalKey<GoogleMapStateBase> _key = GlobalKey<GoogleMapStateBase>();
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +20,7 @@ class DashboarHome extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(
-            top: 20,
+            top: 50,
             left: 20,
           ),
           child: Text(
@@ -53,6 +61,79 @@ class DashboarHome extends StatelessWidget {
                 icon: Icons.comment,
               ),
             ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 20,
+                          left: 20,
+                        ),
+                        child: Text(
+                          "MP of the Week",
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.network(
+                                  "https://picsum.photos/id/237/200/300"),
+                              Text("Hon. Patrick Waweru"),
+                              Text(
+                                "Lorem Ipsum is simply dummy text of the printing and typesetting industry." +
+                                    " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 20,
+                          left: 20,
+                        ),
+                        child: Text(
+                          "MP of the Week",
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: GoogleMap(
+                          key: _key,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         )
       ],
@@ -106,8 +187,8 @@ class SingleTile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title),
-                      SizedBox(height:10),
+                      Opacity(opacity: 0.7, child: Text(title)),
+                      SizedBox(height: 10),
                       Text(
                         subtitle,
                         style: Theme.of(context).textTheme.headline6,
@@ -115,7 +196,7 @@ class SingleTile extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
