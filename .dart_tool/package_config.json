@@ -1,0 +1,248 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {
+      "name": "async",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/async-2.5.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "boolean_selector",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "characters",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0-nullsafety.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "charcode",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/charcode-1.2.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "clock",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "collection",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0-nullsafety.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "convert",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/convert-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "1.17"
+    },
+    {
+      "name": "crypto",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/crypto-2.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.3"
+    },
+    {
+      "name": "cupertino_icons",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.0"
+    },
+    {
+      "name": "fake_async",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/fake_async-1.1.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "flinq",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/flinq-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
+    },
+    {
+      "name": "flutter",
+      "rootUri": "file:///home/benra/Projects/Flutter/beta/packages/flutter",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "flutter_google_maps",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/flutter_google_maps-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
+    },
+    {
+      "name": "flutter_plugin_android_lifecycle",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "flutter_test",
+      "rootUri": "file:///home/benra/Projects/Flutter/beta/packages/flutter_test",
+      "packageUri": "lib/",
+      "languageVersion": "2.2"
+    },
+    {
+      "name": "google_directions_api",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/google_directions_api-0.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
+    },
+    {
+      "name": "google_maps",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/google_maps-3.4.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.3"
+    },
+    {
+      "name": "google_maps_flutter",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.5.32",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "google_maps_flutter_platform_interface",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_platform_interface-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.3"
+    },
+    {
+      "name": "google_polyline_algorithm",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/google_polyline_algorithm-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "http",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/http-0.12.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.4"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/http_parser-3.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.3"
+    },
+    {
+      "name": "js_wrapping",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/js_wrapping-0.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.0"
+    },
+    {
+      "name": "matcher",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "meta",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/meta-1.3.0-nullsafety.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "path",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/path-1.8.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "pedantic",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/pedantic-1.9.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "sky_engine",
+      "rootUri": "file:///home/benra/Projects/Flutter/beta/bin/cache/pkg/sky_engine",
+      "packageUri": "lib/",
+      "languageVersion": "1.11"
+    },
+    {
+      "name": "source_span",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "stack_trace",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "stream_channel",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "stream_transform",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/stream_transform-1.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
+    },
+    {
+      "name": "string_scanner",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "term_glyph",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "test_api",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/test_api-0.2.19-nullsafety",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "typed_data",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0-nullsafety.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "uuid",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/uuid-2.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.2"
+    },
+    {
+      "name": "vector_math",
+      "rootUri": "file:///home/benra/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0-nullsafety.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.10"
+    },
+    {
+      "name": "mbungedashboard",
+      "rootUri": "../",
+      "packageUri": "lib/",
+      "languageVersion": "2.7"
+    }
+  ],
+  "generated": "2020-09-23T07:30:55.302138Z",
+  "generator": "pub",
+  "generatorVersion": "2.10.0-110.3.beta"
+}
