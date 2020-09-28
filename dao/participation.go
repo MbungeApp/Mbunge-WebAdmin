@@ -57,11 +57,8 @@ func (p NewParticipationDaoInterface) ReadOneParticipation(participationID strin
 			return db.Participation{}
 		}
 		log.Fatal(err)
-		return db.Participation{}
-
 	}
 	return participation
-
 }
 func (p NewParticipationDaoInterface) CreateParticipation(participation db.Participation) error {
 	participation.CreatedAt = time.Now()
