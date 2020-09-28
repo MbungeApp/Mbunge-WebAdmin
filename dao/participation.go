@@ -10,7 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"log"
 	"mbunge-admin/models/db"
 	"time"
 )
@@ -53,10 +52,10 @@ func (p NewParticipationDaoInterface) ReadOneParticipation(participationID strin
 		"_id": objectID,
 	}).Decode(participation)
 	if err != nil {
+		//log.Fatal(err)
 		if err == mongo.ErrNoDocuments {
 			return db.Participation{}
 		}
-		log.Fatal(err)
 	}
 	return participation
 }
