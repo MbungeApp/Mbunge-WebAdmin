@@ -19,7 +19,7 @@ type ParticipationDaoInterface interface {
 	ReadAllParticipation() []db.Participation
 	ReadOneParticipation(participationID string) db.Participation
 	CreateParticipation(participation db.Participation) error
-	UpdateParticipation(id string, key string, value string) (db.Participation, error)
+	UpdateParticipation(id string, key string, value string) error
 	DeleteParticipation(participationID string) error
 }
 
