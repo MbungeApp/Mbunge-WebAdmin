@@ -125,8 +125,10 @@ class _DashboarHomeState extends State<DashboarHome> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                         ),
-                        child: GoogleMap(
-                          key: _key,
+                        child: Expanded(
+                                                  child: GoogleMap(
+                            key: _key,
+                          ),
                         ),
                       ),
                     ],
