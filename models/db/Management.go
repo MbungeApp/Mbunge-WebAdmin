@@ -21,6 +21,8 @@ type Management struct {
 }
 
 type Role struct {
-	ID   primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
-	Name string             `json:"name" bson:"name"`
+	ID        primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	Name      string             `json:"name" bson:"name"`
+	CreatedAt time.Time          `json:"created_at" bson:"created_at" form:"created_at"`
+	UpdatedAt time.Time          `json:"updated_at" bson:"updated_at" form:"updated"`
 }
