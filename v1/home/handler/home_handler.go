@@ -6,5 +6,5 @@ import (
 
 func NewHomeHandler(e *echo.Echo) {
 	e.Static("/static", "v1/static")
-	e.File("/", "v1/home/index.html")
+	e.File("/", "v1/templates/index.html")
 }
