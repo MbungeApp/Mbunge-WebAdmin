@@ -5,6 +5,6 @@ import (
 )
 
 func NewHomeHandler(e *echo.Echo) {
-	e.Static("/static", "v1/home/static")
+	e.Static("/static", "v1/static")
 	e.File("/", "v1/home/index.html")
 }

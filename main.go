@@ -25,7 +25,7 @@ func main() {
 
 	_homeHandler.NewHomeHandler(e)
 
-	e.Use(middleware.Logger())
+	//e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
 	e.Logger.Fatal(e.Start(":" + "1323"))
