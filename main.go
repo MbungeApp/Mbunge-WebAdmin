@@ -8,15 +8,16 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 	"html/template"
 	"io"
 	"net/http"
 
-	_loginHandler "mbunge-admin/v1/login/handler"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
+
 	_dashboardHandler "mbunge-admin/v1/dashboard/handler"
 	_homeHandler "mbunge-admin/v1/home/handler"
+	_loginHandler "mbunge-admin/v1/login/handler"
 )
 
 type TemplateRegistry struct {
@@ -34,9 +35,12 @@ func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c 
 	return tmpl.ExecuteTemplate(w, "base.html", data)
 }
 
-
-
 func main() {
+	echo.NotFoundHandler = func(c echo.Context) error {
+		// render your 404 page
+		return c.Render(http.StatusOK, "404.html",nil )
+	
+	}
 	// Echo instance
 	e := echo.New()
 	//session := config.ConnectDB()
@@ -45,12 +49,12 @@ func main() {
 	//}
 	//e.Renderer = renderer
 	templates := make(map[string]*template.Template)
+	templates["404.html"] = template.Must(template.ParseFiles("v1/templates/404.html", "v1/templates/base/base.html"))
 	templates["dashboard.html"] = template.Must(template.ParseFiles("v1/templates/dashboard.html", "v1/templates/base/base.html"))
 	templates["login.html"] = template.Must(template.ParseFiles("v1/templates/login.html", "v1/templates/base/base.html"))
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
 	}
-
 
 	// middleware
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
