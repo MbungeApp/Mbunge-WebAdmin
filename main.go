@@ -6,39 +6,51 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"html/template"
 	"io"
 	"net/http"
 
+	_loginHandler "mbunge-admin/v1/login/handler"
 	_dashboardHandler "mbunge-admin/v1/dashboard/handler"
 	_homeHandler "mbunge-admin/v1/home/handler"
 )
 
-type TemplateRenderer struct {
-	templates *template.Template
+type TemplateRegistry struct {
+	templates map[string]*template.Template
 }
 
-// Render renders a template document
-func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-
-	// Add global methods if data is a map
-	if viewContext, isMap := data.(map[string]interface{}); isMap {
-		viewContext["reverse"] = c.Echo().Reverse
+// Implement e.Renderer interface
+func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	tmpl, ok := t.templates[name]
+	if !ok {
+		err := errors.New("Template not found -> " + name)
+		fmt.Println("##########################")
+		return err
 	}
-
-	return t.templates.ExecuteTemplate(w, name, data)
+	return tmpl.ExecuteTemplate(w, "base.html", data)
 }
+
+
 
 func main() {
 	// Echo instance
 	e := echo.New()
 	//session := config.ConnectDB()
-	renderer := &TemplateRenderer{
-		templates: template.Must(template.ParseGlob("v1/templates/*.html")),
+	//renderer := &TemplateRenderer{
+	//	templates: template.Must(template.ParseGlob("v1/templates/*.html")),
+	//}
+	//e.Renderer = renderer
+	templates := make(map[string]*template.Template)
+	templates["dashboard.html"] = template.Must(template.ParseFiles("v1/templates/dashboard.html", "v1/templates/base/base.html"))
+	templates["login.html"] = template.Must(template.ParseFiles("v1/templates/login.html", "v1/templates/base/base.html"))
+	e.Renderer = &TemplateRegistry{
+		templates: templates,
 	}
-	e.Renderer = renderer
+
 
 	// middleware
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -48,8 +60,9 @@ func main() {
 
 	_homeHandler.NewHomeHandler(e)
 	_dashboardHandler.NewDashboardHandler(e)
+	_loginHandler.NewLoginHandler(e)
 
-	//e.Use(middleware.Logger())
+	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
 	e.Logger.Fatal(e.Start(":" + "1323"))
