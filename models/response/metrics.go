@@ -3,7 +3,7 @@
  * MbungeApp Inc all rights reserved
  */
 
-package payload
+package response
 
 type Metrics struct {
 	TotalUsers         int `json:"total_users"`
