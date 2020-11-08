@@ -18,13 +18,15 @@ import (
 	_dashboardHandler "mbunge-admin/v1/dashboard/handler"
 	_homeHandler "mbunge-admin/v1/home/handler"
 	_loginHandler "mbunge-admin/v1/login/handler"
+	_participationHandler "mbunge-admin/v1/participations/handler"
 )
 
+// TemplateRegistry ..
 type TemplateRegistry struct {
 	templates map[string]*template.Template
 }
 
-// Implement e.Renderer interface
+// Render Implement e.Renderer interface
 func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	tmpl, ok := t.templates[name]
 	if !ok {
@@ -38,8 +40,8 @@ func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c 
 func main() {
 	echo.NotFoundHandler = func(c echo.Context) error {
 		// render your 404 page
-		return c.Render(http.StatusOK, "404.html",nil )
-	
+		return c.Render(http.StatusOK, "404.html", nil)
+
 	}
 	// Echo instance
 	e := echo.New()
@@ -50,8 +52,10 @@ func main() {
 	//e.Renderer = renderer
 	templates := make(map[string]*template.Template)
 	templates["404.html"] = template.Must(template.ParseFiles("v1/templates/404.html", "v1/templates/base/base.html"))
-	templates["dashboard.html"] = template.Must(template.ParseFiles("v1/templates/dashboard.html", "v1/templates/base/base.html"))
+
 	templates["login.html"] = template.Must(template.ParseFiles("v1/templates/login.html", "v1/templates/base/base.html"))
+	templates["dashboard.html"] = template.Must(template.ParseFiles("v1/templates/dashboard.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
+	templates["participation.html"] = template.Must(template.ParseFiles("v1/templates/participation.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
 	}
@@ -64,6 +68,7 @@ func main() {
 
 	_homeHandler.NewHomeHandler(e)
 	_dashboardHandler.NewDashboardHandler(e)
+	_participationHandler.NewParticipationHandler(e)
 	_loginHandler.NewLoginHandler(e)
 
 	e.Use(middleware.Logger())
