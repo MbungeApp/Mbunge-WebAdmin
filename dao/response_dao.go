@@ -14,7 +14,7 @@ import (
 )
 
 type ResponseDaoInterface interface {
-	ReadAllResponse() []db.Response
+	ReadAllResponse(id string) []db.Response
 	ReadOneParticipation(responseId string) db.Response
 }
 
@@ -26,9 +26,12 @@ func responseCollection(client *mongo.Client) *mongo.Collection {
 	return client.Database("mbunge").Collection("response")
 }
 
-func (r NewResponseDaoInterface) ReadAllResponse() []db.Response {
+func (r NewResponseDaoInterface) ReadAllResponse(id string) []db.Response {
+	objectID, _ := primitive.ObjectIDFromHex(id)
 	var responses []db.Response
-	cursor, err := responseCollection(r.Client).Find(context.Background(), bson.M{})
+	cursor, err := responseCollection(r.Client).Find(context.Background(), bson.M{
+		"_id": objectID,
+	})
 	if err != nil {
 		return nil
 	}
