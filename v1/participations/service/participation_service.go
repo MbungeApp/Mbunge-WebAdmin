@@ -8,7 +8,7 @@ import (
 // ParticipationService ..
 type ParticipationService interface {
 	GetAllParticipations() []db.Participation
-	AddParticipation(addParticipation request.PartipationRequest) error
+	AddParticipation(addParticipation *request.PartipationRequest) error
 	EditParticipation(id string, key string, value string) error
 	DeleteParticipation(id string) error
 	GetAllResponses(id string) []db.Response

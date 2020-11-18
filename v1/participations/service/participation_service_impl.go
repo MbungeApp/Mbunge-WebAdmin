@@ -33,7 +33,7 @@ func (p participationServiceImpl) GetAllParticipations() []db.Participation {
 	participations := p.participationDao.ReadAllParticipation()
 	return participations
 }
-func (p participationServiceImpl) AddParticipation(addParticipation request.PartipationRequest) error {
+func (p participationServiceImpl) AddParticipation(addParticipation *request.PartipationRequest) error {
 	layout := "2006-01-02T15:04:05.000Z"
 	t, err := time.Parse(layout, addParticipation.ExpireAt)
 
