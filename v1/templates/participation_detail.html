@@ -103,8 +103,9 @@
                         </ul>
                     </div>
                 </nav>
+
                 <div class="container-fluid">
-                    <div class="d-sm-flex justify-content-between align-items-center mb-4"><a href="participations.html"><i class="material-icons">arrow_back</i></a>
+                    <div class="d-sm-flex justify-content-between align-items-center mb-4"><a onclick="go_back();"><i class="material-icons">arrow_back</i></a>
                         <h3 class="text-dark mb-0">Responses</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="#"><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Generate PDF</a></div>
                     <div class="card shadow">
                         <div class="card-body">
@@ -122,4 +123,9 @@
             </footer>
         </div>
     </div>
+        <script>
+            function go_back() {
+                window.location.lasthash.pop();
+            }
+        </script>
 {{end}}

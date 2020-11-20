@@ -34,7 +34,7 @@ func (p participationServiceImpl) GetAllParticipations() []db.Participation {
 	return participations
 }
 func (p participationServiceImpl) AddParticipation(addParticipation *request.PartipationRequest) error {
-	layout := "2006-01-02T15:04:05.000Z"
+	layout := "2006-01-02"
 	t, err := time.Parse(layout, addParticipation.ExpireAt)
 
 	if err != nil {

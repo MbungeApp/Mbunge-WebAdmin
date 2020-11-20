@@ -62,6 +62,7 @@ func (p NewParticipationDaoInterface) ReadOneParticipation(participationID strin
 func (p NewParticipationDaoInterface) CreateParticipation(participation db.Participation) error {
 	participation.CreatedAt = time.Now()
 	participation.UpdatedAt = time.Now()
+	participation.ID = primitive.NewObjectID()
 	_, err := participationCollection(p.Client).InsertOne(context.Background(), participation)
 
 	if err != nil {

@@ -7,7 +7,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"html/template"
 	"io"
 	"net/http"
@@ -15,10 +14,12 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 
+	"mbunge-admin/config"
 	_dashboardHandler "mbunge-admin/v1/dashboard/handler"
 	_homeHandler "mbunge-admin/v1/home/handler"
 	_loginHandler "mbunge-admin/v1/login/handler"
 	_participationHandler "mbunge-admin/v1/participations/handler"
+	_participationService "mbunge-admin/v1/participations/service"
 )
 
 // TemplateRegistry ..
@@ -31,7 +32,6 @@ func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c 
 	tmpl, ok := t.templates[name]
 	if !ok {
 		err := errors.New("Template not found -> " + name)
-		fmt.Println("##########################")
 		return err
 	}
 	return tmpl.ExecuteTemplate(w, "base.html", data)
@@ -45,7 +45,7 @@ func main() {
 	}
 	// Echo instance
 	e := echo.New()
-	//session := config.ConnectDB()
+	session := config.ConnectDB()
 	//renderer := &TemplateRenderer{
 	//	templates: template.Must(template.ParseGlob("v1/templates/*.html")),
 	//}
@@ -56,6 +56,7 @@ func main() {
 	templates["login.html"] = template.Must(template.ParseFiles("v1/templates/login.html", "v1/templates/base/base.html"))
 	templates["dashboard.html"] = template.Must(template.ParseFiles("v1/templates/dashboard.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	templates["participation.html"] = template.Must(template.ParseFiles("v1/templates/participation.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
+	templates["participation_detail.html"] = template.Must(template.ParseFiles("v1/templates/participation_detail.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
 	}
@@ -68,7 +69,9 @@ func main() {
 
 	_homeHandler.NewHomeHandler(e)
 	_dashboardHandler.NewDashboardHandler(e)
-	_participationHandler.NewParticipationHandler(e)
+
+	participationService := _participationService.NewparticipationServiceImpl(session)
+	_participationHandler.NewParticipationHandler(e, participationService)
 	_loginHandler.NewLoginHandler(e)
 
 	e.Use(middleware.Logger())

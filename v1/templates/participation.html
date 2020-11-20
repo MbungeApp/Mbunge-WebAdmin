@@ -1,15 +1,14 @@
 {{define "content"}}
-{{/*<script>*/}}
-{{/*    console.log('{{index . "data"}}');*/}}
-{{/*    console.log('{{index . "notifications"}}');*/}}
-{{/*    let notification = '{{index . "notifications"}}';*/}}
-{{/*    if (notification.length !== 0) {*/}}
-{{/*        iziToast.success({*/}}
-{{/*            title: 'OK',*/}}
-{{/*            message: notification,*/}}
-{{/*        });*/}}
-{{/*    }*/}}
-{{/*</script>*/}}
+<script>
+    console.log('{{index . "notifications"}}');
+    let notification = '{{index . "notifications"}}';
+    if (notification.length !== 0) {
+        iziToast.success({
+            title: 'OK',
+            message: notification,
+        });
+    }
+</script>
 <div id="wrapper">
     {{template "sidebar" .}}
     <div class="d-flex flex-column" id="content-wrapper">
@@ -243,35 +242,48 @@
                                 <div class="card-body">
                                     <p class="text-danger card-text">All fields are a must</p>
                                     <div class="col">
-                                        <form>
-                                            <p style="margin-bottom: 5px;">Name</p><input class="form-control"
-                                                type="text" style="margin-bottom: 15px;" required="">
+                                        <form method="post" action="/participation/add">
+                                            <p style="margin-bottom: 5px;">Name</p>
+                                            <input name="name" class="form-control" type="text" style="margin-bottom: 15px;" required="">
                                             <p style="margin-bottom: 5px;margin-top: 10px;">Choose a sector</p>
-                                            <div class="dropdown"><button
-                                                    class="btn btn-primary dropdown-toggle text-left"
-                                                    data-toggle="dropdown" aria-expanded="false" type="button"
-                                                    style="background-color: rgb(255,255,255);color: rgb(0,0,0);width: 100%;">Agriculture&nbsp;</button>
-                                                <div class="dropdown-menu"><a class="dropdown-item" href="#">First
-                                                        Item</a><a class="dropdown-item" href="#">Second Item</a><a
-                                                        class="dropdown-item" href="#">Third Item</a></div>
-                                            </div>
+{{/*                                            <div class="dropdown">*/}}
+{{/*                                                <button*/}}
+{{/*                                                    class="btn btn-primary dropdown-toggle text-left"*/}}
+{{/*                                                    data-toggle="dropdown" aria-expanded="false" type="button"*/}}
+{{/*                                                    style="background-color: rgb(255,255,255);color: rgb(0,0,0);width: 100%;">Sector&nbsp;</button>*/}}
+{{/*                                                <div class="dropdown-menu">*/}}
+{{/*                                                    <a class="dropdown-item" href="#">Agriculture</a>*/}}
+{{/*                                                    <a class="dropdown-item" href="#">Second Item</a>*/}}
+{{/*                                                    <a class="dropdown-item" href="#">Third Item</a>*/}}
+{{/*                                                </div>*/}}
+{{/*                                            </div>*/}}
+                                            <select class="dropdown" id="sectors" name="sector">
+                                                <option class="dropdown-item" value="Agriculture">Agriculture</option>
+                                                <option class="dropdown-item" value="Tourism">Tourism</option>
+                                                <option class="dropdown-item" value="Manufacturing">Manufacturing</option>
+                                                <option class="dropdown-item" value="Transport and Infrastructure">Transport and Infrastructure</option>
+                                                <option class="dropdown-item" value="ICT">ICT</option>
+                                                <option class="dropdown-item" value="Building and Construction">Building and Construction</option>
+                                                <option class="dropdown-item" value="Governance">Governance</option>
+                                                <option class="dropdown-item" value="Education">Education</option>
+                                            </select>
                                             <div class="form-row" style="margin-top: 25px;margin-bottom: 10px;">
                                                 <div class="col">
-                                                    <p style="margin-bottom: 5px;">Created At</p><input
-                                                        class="form-control" type="date"
-                                                        style="margin-right: 5px;padding-right: 15px;" required="">
+                                                    <p style="margin-bottom: 5px;">Created At</p>
+                                                    <input class="form-control" type="date" style="margin-right: 5px;padding-right: 15px;" required="">
                                                 </div>
                                                 <div class="col">
                                                     <p style="margin-bottom: 5px;">Deadline to stop accept responses</p>
-                                                    <input class="form-control" type="date" required="">
+                                                    <input name="expire_at" class="form-control" type="date" required="">
                                                 </div>
                                             </div>
-                                            <p style="margin-bottom: 5px;margin-top: 25px;">Posted by:</p><input
-                                                class="form-control" type="text" readonly="" value="Admin">
-                                            <p style="margin-bottom: 5px;margin-top: 25px;">Body</p><textarea
-                                                class="form-control" rows="10"></textarea><button
-                                                class="btn btn-primary" type="button"
-                                                style="background-color: rgb(78,223,136);margin-top: 20px;text-align: center;">Add</button>
+                                            <p style="margin-bottom: 5px;margin-top: 25px;">Posted by:</p>
+                                            <input name="posted_by" class="form-control" type="text" readonly="" value="Admin">
+                                            <p style="margin-bottom: 5px;margin-top: 25px;">Body</p>
+                                            <textarea name="body" class="form-control" rows="10"></textarea>
+                                            <button class="btn btn-primary" type="submit" style="background-color: rgb(78,223,136);margin-top: 20px;text-align: center;">
+                                                Add
+                                            </button>
                                         </form>
                                     </div>
                                 </div>

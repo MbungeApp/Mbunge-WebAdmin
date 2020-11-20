@@ -43,24 +43,30 @@ func (p participationHandler) getAllParticipations(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 	return c.Render(http.StatusOK, "participation.html", map[string]interface{}{
-		"data":          participationMap,
-		"notifications": "An error occurred",
+		"data": participationMap,
 	})
 }
 func (p participationHandler) addParticipation(c echo.Context) error {
+	var participationMap []interface{}
 	participationReq := new(request.PartipationRequest)
 	if err := c.Bind(participationReq); err != nil {
 		return err
 	}
 	err := p.participationService.AddParticipation(participationReq)
+
+	marshalParticipations, error := json.Marshal(p.participationService.GetAllParticipations())
+	if error != nil {
+		return c.String(http.StatusInternalServerError, "error occurred")
+	}
+	error = json.Unmarshal(marshalParticipations, &participationMap)
 	if err != nil {
 		return c.Render(http.StatusOK, "participation.html", map[string]interface{}{
-			"data":          p.participationService.GetAllParticipations(),
+			"data":          participationMap,
 			"notifications": "An error occurred",
 		})
 	} else {
 		return c.Render(http.StatusOK, "participation.html", map[string]interface{}{
-			"data":          p.participationService.GetAllParticipations(),
+			"data":          participationMap,
 			"notifications": "Added Participation successfully",
 		})
 	}
