@@ -7,13 +7,14 @@ package config
 import (
 	"context"
 	"fmt"
+	"log"
+	"path/filepath"
+	"time"
+
 	"github.com/getsentry/sentry-go"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/ini.v1"
-	"log"
-	"path/filepath"
-	"time"
 )
 
 const (
@@ -80,12 +81,12 @@ func ConnectDB() *mongo.Client {
 		log.Fatal(err)
 	}
 	log.Println("Connected")
-	defer func() {
-		log.Println("DB disconnected from main")
-		err := client.Disconnect(context.Background())
-		if err != nil {
-			log.Println("db disc err ", err)
-		}
-	}()
+	// defer func() {
+	// 	log.Println("DB disconnected from main")
+	// 	err := client.Disconnect(context.Background())
+	// 	if err != nil {
+	// 		log.Println("db disc err ", err)
+	// 	}
+	// }()
 	return client
 }
