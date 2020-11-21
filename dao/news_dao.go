@@ -16,6 +16,7 @@ import (
 
 // CRUD
 type NewsDaoInterface interface {
+	TotalNews() int
 	ReadAllNews() []db.EventNew
 	ReadOneNews(newsID string) db.EventNew
 	CreateNews(news db.EventNew) error
@@ -29,6 +30,19 @@ type NewNewsDaoInterface struct {
 
 func newsCollection(client *mongo.Client) *mongo.Collection {
 	return client.Database("mbunge").Collection("event")
+}
+func (u NewNewsDaoInterface) TotalNews() int {
+	var events []db.EventNew
+
+	cursor, err := newsCollection(u.Client).Find(context.Background(), bson.M{})
+	if err != nil {
+		return 0
+	}
+	err = cursor.All(context.Background(), &events)
+	if err != nil {
+		return 0
+	}
+	return len(events)
 }
 func (u NewNewsDaoInterface) ReadNews() ([]db.EventNew, error) {
 	var events []db.EventNew

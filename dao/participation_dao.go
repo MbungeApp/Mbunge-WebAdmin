@@ -16,6 +16,7 @@ import (
 
 // CRUD
 type ParticipationDaoInterface interface {
+	TotalParticipations() int
 	ReadAllParticipation() []db.Participation
 	ReadOneParticipation(participationID string) db.Participation
 	CreateParticipation(participation db.Participation) error
@@ -29,6 +30,18 @@ type NewParticipationDaoInterface struct {
 
 func participationCollection(client *mongo.Client) *mongo.Collection {
 	return client.Database("mbunge").Collection("participation")
+}
+func (p NewParticipationDaoInterface) TotalParticipations() int {
+	var participation []db.Participation
+	cursor, err := participationCollection(p.Client).Find(context.Background(), bson.M{})
+	if err != nil {
+		return 0
+	}
+	err = cursor.All(context.Background(), &participation)
+	if err != nil {
+		return 0
+	}
+	return len(participation)
 }
 
 func (p NewParticipationDaoInterface) ReadAllParticipation() []db.Participation {
