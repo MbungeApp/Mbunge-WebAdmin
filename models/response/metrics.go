@@ -6,10 +6,10 @@
 package response
 
 type Metrics struct {
-	Card          Card         `json:"card"`
-	MpOfTheWeek   MpOfTheWeek  `json:"mp_of_the_week"`
-	GenderRation  GenderRation `json:"gender_ration"`
-	UsersLocation []string     `json:"users_location"`
+	Card          Card           `json:"card"`
+	MpOfTheWeek   MpOfTheWeek    `json:"mp_of_the_week"`
+	GenderRation  GenderRation   `json:"gender_ration"`
+	UsersLocation []UserLocation `json:"users_location"`
 }
 type Card struct {
 	TotalUsers         int `json:"total_users"`
@@ -27,4 +27,11 @@ type MpOfTheWeek struct {
 type GenderRation struct {
 	Male   int `json:"male"`
 	Female int `json:"female"`
+}
+
+type UserLocation struct {
+	Name      string  `json:"name"`
+	Count     int     `json:"count"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
 }

@@ -16,6 +16,7 @@ import (
 
 	"mbunge-admin/config"
 	_dashboardHandler "mbunge-admin/v1/dashboard/handler"
+	_dashboardService "mbunge-admin/v1/dashboard/service"
 	_homeHandler "mbunge-admin/v1/home/handler"
 	_loginHandler "mbunge-admin/v1/login/handler"
 	_participationHandler "mbunge-admin/v1/participations/handler"
@@ -68,10 +69,13 @@ func main() {
 	}))
 
 	_homeHandler.NewHomeHandler(e)
-	_dashboardHandler.NewDashboardHandler(e)
+
+	dashboardService := _dashboardService.NewDashboardServiceImpl(session)
+	_dashboardHandler.NewDashboardHandler(e, dashboardService)
 
 	participationService := _participationService.NewparticipationServiceImpl(session)
 	_participationHandler.NewParticipationHandler(e, participationService)
+
 	_loginHandler.NewLoginHandler(e)
 
 	e.Use(middleware.Logger())

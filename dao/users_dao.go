@@ -84,7 +84,9 @@ func (s NewUserDaoInterface) UsersLocation() []string {
 		return nil
 	}
 	for _, user := range users {
-		locations = append(locations, user.County)
+		if user.County != "" {
+			locations = append(locations, user.County)
+		}
 	}
 	return locations
 }
