@@ -31,7 +31,7 @@ func NewParticipationHandler(e *echo.Echo, participationService service.Particip
 	g.GET("/view/:id", participationHandler.getOneParticipation)
 	g.GET("/edit/:id", participationHandler.editParticipation)
 	g.PUT("/edit/:id", participationHandler.edit1Participation)
-	g.DELETE("/delete/:id", participationHandler.deleteParticipation)
+	g.GET("/delete/:id", participationHandler.deleteParticipation)
 }
 
 func (p participationHandler) getAllParticipations(c echo.Context) error {
