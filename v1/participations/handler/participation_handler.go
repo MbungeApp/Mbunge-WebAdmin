@@ -128,5 +128,5 @@ func (p participationHandler) deleteParticipation(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "error occurred")
 	}
 
-	return c.Redirect(http.StatusOK, "/participation")
+	return c.Redirect(http.StatusFound, "/participation")
 }
