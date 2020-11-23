@@ -53,6 +53,14 @@ func (p participationServiceImpl) AddParticipation(addParticipation *request.Par
 	}
 	return nil
 }
+func (p participationServiceImpl) GetParticipationById(id string) (db.Participation, error) {
+
+	participation, err := p.participationDao.ReadOneParticipation(id)
+	if err != nil {
+		return db.Participation{}, err
+	}
+	return participation, nil
+}
 func (p participationServiceImpl) EditParticipation(id string, key string, value string) error {
 	err := p.participationDao.UpdateParticipation(id, key, value)
 	if err != nil {

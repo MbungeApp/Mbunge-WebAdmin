@@ -58,6 +58,7 @@ func main() {
 	templates["dashboard.html"] = template.Must(template.ParseFiles("v1/templates/dashboard.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	templates["participation.html"] = template.Must(template.ParseFiles("v1/templates/participation.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	templates["participation_detail.html"] = template.Must(template.ParseFiles("v1/templates/participation_detail.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
+	templates["participation_edit.html"] = template.Must(template.ParseFiles("v1/templates/participation_edit.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
 	}

@@ -1,0 +1,85 @@
+{{define "content"}}
+    <script>
+        console.log('{{.}}');
+
+    </script>
+    <div id="wrapper">
+        {{template "sidebar" .}}
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid">
+
+
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                        <h3 class="text-dark mb-0">Public Participations</h3><a
+                                class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="#"><i
+                                    class="fas fa-download fa-sm text-white-50"></i>&nbsp;Generate Report</a>
+                    </div>
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">Edit</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" role="tabpanel" id="tab-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="text-danger card-text">All fields are a must</p>
+                                        <div class="col">
+                                            <form method="post" action="/participation/add">
+                                                <p style="margin-bottom: 5px;">Name</p>
+                                                <input value="{{ .name }}" name="name" class="form-control" type="text" style="margin-bottom: 15px;" required="">
+                                                <p style="margin-bottom: 5px;margin-top: 10px;">Choose a sector</p>
+
+                                                <select value="{{ .sector }}" class="dropdown" id="sectors" name="sector">
+                                                    <option class="dropdown-item" value="Agriculture">Agriculture</option>
+                                                    <option class="dropdown-item" value="Tourism">Tourism</option>
+                                                    <option class="dropdown-item" value="Manufacturing">Manufacturing</option>
+                                                    <option class="dropdown-item" value="Transport and Infrastructure">Transport and Infrastructure</option>
+                                                    <option class="dropdown-item" value="ICT">ICT</option>
+                                                    <option class="dropdown-item" value="Building and Construction">Building and Construction</option>
+                                                    <option class="dropdown-item" value="Governance">Governance</option>
+                                                    <option class="dropdown-item" value="Education">Education</option>
+                                                </select>
+                                                <div class="form-row" style="margin-top: 25px;margin-bottom: 10px;">
+                                                    <div class="col">
+                                                        <p style="margin-bottom: 5px;">Created At</p>
+                                                        <input  class="form-control" type="date" style="margin-right: 5px;padding-right: 15px;" required="">
+                                                    </div>
+                                                    <div class="col">
+                                                        <p style="margin-bottom: 5px;">Deadline to stop accept responses</p>
+                                                        <input  name="expire_at" class="form-control" type="date" required="">
+                                                    </div>
+                                                </div>
+                                                <p style="margin-bottom: 5px;margin-top: 25px;">Posted by:</p>
+                                                <input  value="{{ .posted_by }}" name="posted_by" class="form-control" type="text">
+                                                <p style="margin-bottom: 5px;margin-top: 25px;">Body</p>
+                                                <textarea name="body" class="form-control" rows="10"> {{ .body }} </textarea>
+                                                <button class="btn btn-primary" type="submit" style="background-color: rgb(78,223,136);margin-top: 20px;text-align: center;">
+                                                    Add
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © mbunge 2020</span></div>
+                </div>
+            </footer>
+        </div>
+    </div>
+        <script>
+
+        </script>
+{{end}}

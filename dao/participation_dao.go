@@ -18,7 +18,7 @@ import (
 type ParticipationDaoInterface interface {
 	TotalParticipations() int
 	ReadAllParticipation() []db.Participation
-	ReadOneParticipation(participationID string) db.Participation
+	ReadOneParticipation(participationID string) (db.Participation, error)
 	CreateParticipation(participation db.Participation) error
 	UpdateParticipation(id string, key string, value string) error
 	DeleteParticipation(participationID string) error
@@ -57,20 +57,18 @@ func (p NewParticipationDaoInterface) ReadAllParticipation() []db.Participation 
 	return participation
 }
 
-func (p NewParticipationDaoInterface) ReadOneParticipation(participationID string) db.Participation {
+func (p NewParticipationDaoInterface) ReadOneParticipation(participationID string) (db.Participation, error) {
 	objectID, _ := primitive.ObjectIDFromHex(participationID)
 	var participation db.Participation
 
-	err := participationCollection(p.Client).FindOne(context.Background(), bson.M{
-		"_id": objectID,
-	}).Decode(participation)
+	err := participationCollection(p.Client).FindOne(context.Background(), bson.D{{"_id", objectID}}).Decode(&participation)
 	if err != nil {
-		//log.Fatal(err)
 		if err == mongo.ErrNoDocuments {
-			return db.Participation{}
+			return db.Participation{}, err
 		}
+		return db.Participation{}, err
 	}
-	return participation
+	return participation, nil
 }
 func (p NewParticipationDaoInterface) CreateParticipation(participation db.Participation) error {
 	participation.CreatedAt = time.Now()
