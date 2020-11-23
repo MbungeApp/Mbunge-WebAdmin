@@ -122,9 +122,11 @@ func (p participationHandler) edit1Participation(c echo.Context) error {
 func (p participationHandler) deleteParticipation(c echo.Context) error {
 	id := c.Param("id")
 
-	return c.Render(http.StatusOK, "participation.html", map[string]interface{}{
-		"data":          p.participationService.GetAllParticipations(),
-		"notifications": "Deleted Participation successfully",
-		"id":            id,
-	})
+	err := p.participationService.DeleteParticipation(id)
+	if err != nil {
+		fmt.Println("Error deleting: ", err.Error())
+		return c.String(http.StatusInternalServerError, "error occurred")
+	}
+
+	return c.Redirect(http.StatusOK, "/participation")
 }
