@@ -7,6 +7,7 @@ package dao
 
 import (
 	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -60,9 +61,7 @@ func (n NewNewsDaoInterface) ReadOneNews(newsID string) db.EventNew {
 	objectID, _ := primitive.ObjectIDFromHex(newsID)
 	var news db.EventNew
 
-	err := newsCollection(n.Client).FindOne(context.Background(), bson.M{
-		"_id": objectID,
-	}).Decode(news)
+	err := newsCollection(n.Client).FindOne(context.Background(), bson.D{{"_id", objectID}}).Decode(&news)
 	if err != nil {
 		//log.Fatal(err)
 		if err == mongo.ErrNoDocuments {
@@ -74,6 +73,7 @@ func (n NewNewsDaoInterface) ReadOneNews(newsID string) db.EventNew {
 func (n NewNewsDaoInterface) CreateNews(news db.EventNew) error {
 	news.UpdatedAt = time.Now()
 	news.CreatedAt = time.Now()
+	news.ID = primitive.NewObjectID()
 	_, err := newsCollection(n.Client).InsertOne(context.Background(), news)
 	if err != nil {
 		return err
@@ -85,13 +85,21 @@ func (n NewNewsDaoInterface) UpdateNews(newsID string, key string, value string)
 	filter := bson.D{{"_id", objID}}
 	update := bson.D{{Key: "$set", Value: bson.M{key: value, "updated_at": time.Now()}}}
 
-	_, err := newsCollection(n.Client).UpdateOne(
+	result, err := newsCollection(n.Client).UpdateOne(
 		context.Background(),
 		filter,
 		update,
 	)
 	if err != nil {
+		fmt.Println(err)
 		return err
+	}
+	if result.MatchedCount != 0 {
+		fmt.Println("matched and replaced an existing document")
+		return nil
+	}
+	if result.UpsertedCount != 0 {
+		fmt.Printf("inserted a new document with ID %v\n", result.UpsertedID)
 	}
 	return nil
 }
