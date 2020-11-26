@@ -7,9 +7,10 @@ package dao
 
 import (
 	"context"
+	"mbunge-admin/models/db"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"mbunge-admin/models/db"
 )
 
 type UserDaoInterface interface {
@@ -47,7 +48,6 @@ func (s NewUserDaoInterface) GetGenderTotals() (int, int) {
 	}
 	return male, female
 }
-
 func (s NewUserDaoInterface) TotalUsers() int {
 	var users []db.User
 	cursor, err := userCollection(s.Client).Find(context.Background(), bson.M{})

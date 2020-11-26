@@ -14,8 +14,8 @@ type participationServiceImpl struct {
 	responseDao      dao.ResponseDaoInterface
 }
 
-// NewparticipationServiceImpl ..
-func NewparticipationServiceImpl(client *mongo.Client) ParticipationService {
+// NewParticipationServiceImpl ..
+func NewParticipationServiceImpl(client *mongo.Client) ParticipationService {
 	partiDao := dao.NewParticipationDaoInterface{
 		Client: client,
 	}
