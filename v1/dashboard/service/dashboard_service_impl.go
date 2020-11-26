@@ -11,8 +11,8 @@ import (
 type dashboardServiceImpl struct {
 	participationDao dao.ParticipationDaoInterface
 	responseDao      dao.ResponseDaoInterface
-	//eventsDao        dao.NewsDaoInterface
-	usersDao dao.UserDaoInterface
+	usersDao         dao.UserDaoInterface
+	newsEventsDao    dao.NewsDaoInterface
 }
 
 // NewDashboardServiceImpl ..
@@ -23,16 +23,16 @@ func NewDashboardServiceImpl(client *mongo.Client) DashboardServices {
 	resDao := dao.NewResponseDaoInterface{
 		Client: client,
 	}
-	//evenDao := dao.NewEventDaoInterface{
-	//	Client: client,
-	//}
+	newDao := dao.NewNewsDaoInterface{
+		Client: client,
+	}
 	userDao := dao.NewUserDaoInterface{Client: client}
 
 	return &dashboardServiceImpl{
 		participationDao: partiDao,
 		responseDao:      resDao,
-		//eventsDao: evenDao ,
-		usersDao: userDao,
+		usersDao:         userDao,
+		newsEventsDao:    newDao,
 	}
 }
 func (d dashboardServiceImpl) GetMetrics() response.Metrics {
@@ -41,7 +41,7 @@ func (d dashboardServiceImpl) GetMetrics() response.Metrics {
 		TotalUsers:         d.usersDao.TotalUsers(),
 		TotalParticipation: d.participationDao.TotalParticipations(),
 		TotalResponses:     d.responseDao.TotalResponses(),
-		TotalEvents:        23, //d.eventsDao.TotalNews(),
+		TotalEvents:        d.newsEventsDao.TotalNews(),
 	}
 
 	male, female := d.usersDao.GetGenderTotals()

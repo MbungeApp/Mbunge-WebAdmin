@@ -14,27 +14,26 @@ import (
 	"time"
 )
 
-// CRUD
 type NewsDaoInterface interface {
 	TotalNews() int
-	ReadAllNews() []db.EventNew
+	ReadAllNews() ([]db.EventNew, error)
 	ReadOneNews(newsID string) db.EventNew
 	CreateNews(news db.EventNew) error
 	UpdateNews(newsID string, key string, value string) error
 	DeleteNews(newsID string) error
 }
 
-type NewEventDaoInterface struct {
+type NewNewsDaoInterface struct {
 	Client *mongo.Client
 }
 
 func newsCollection(client *mongo.Client) *mongo.Collection {
 	return client.Database("mbunge").Collection("event")
 }
-func (u NewEventDaoInterface) TotalNews() int {
+func (n NewNewsDaoInterface) TotalNews() int {
 	var events []db.EventNew
 
-	cursor, err := newsCollection(u.Client).Find(context.Background(), bson.M{})
+	cursor, err := newsCollection(n.Client).Find(context.Background(), bson.M{})
 	if err != nil {
 		return 0
 	}
@@ -44,10 +43,10 @@ func (u NewEventDaoInterface) TotalNews() int {
 	}
 	return len(events)
 }
-func (u NewEventDaoInterface) ReadNews() ([]db.EventNew, error) {
+func (n NewNewsDaoInterface) ReadAllNews() ([]db.EventNew, error) {
 	var events []db.EventNew
 
-	cursor, err := newsCollection(u.Client).Find(context.Background(), bson.M{})
+	cursor, err := newsCollection(n.Client).Find(context.Background(), bson.M{})
 	if err != nil {
 		return nil, err
 	}
@@ -57,12 +56,11 @@ func (u NewEventDaoInterface) ReadNews() ([]db.EventNew, error) {
 	}
 	return events, nil
 }
-
-func (u NewEventDaoInterface) ReadOneNews(newsID string) db.EventNew {
+func (n NewNewsDaoInterface) ReadOneNews(newsID string) db.EventNew {
 	objectID, _ := primitive.ObjectIDFromHex(newsID)
 	var news db.EventNew
 
-	err := newsCollection(u.Client).FindOne(context.Background(), bson.M{
+	err := newsCollection(n.Client).FindOne(context.Background(), bson.M{
 		"_id": objectID,
 	}).Decode(news)
 	if err != nil {
@@ -73,21 +71,21 @@ func (u NewEventDaoInterface) ReadOneNews(newsID string) db.EventNew {
 	}
 	return news
 }
-func (u NewEventDaoInterface) CreateNews(news db.EventNew) error {
+func (n NewNewsDaoInterface) CreateNews(news db.EventNew) error {
 	news.UpdatedAt = time.Now()
 	news.CreatedAt = time.Now()
-	_, err := newsCollection(u.Client).InsertOne(context.Background(), news)
+	_, err := newsCollection(n.Client).InsertOne(context.Background(), news)
 	if err != nil {
 		return err
 	}
 	return nil
 }
-func (u NewEventDaoInterface) UpdateNews(newsID string, key string, value string) error {
+func (n NewNewsDaoInterface) UpdateNews(newsID string, key string, value string) error {
 	objID, _ := primitive.ObjectIDFromHex(newsID)
 	filter := bson.D{{"_id", objID}}
 	update := bson.D{{Key: "$set", Value: bson.M{key: value, "updated_at": time.Now()}}}
 
-	_, err := newsCollection(u.Client).UpdateOne(
+	_, err := newsCollection(n.Client).UpdateOne(
 		context.Background(),
 		filter,
 		update,
@@ -97,9 +95,9 @@ func (u NewEventDaoInterface) UpdateNews(newsID string, key string, value string
 	}
 	return nil
 }
-func (u NewEventDaoInterface) DeleteNews(newsID string) error {
+func (n NewNewsDaoInterface) DeleteNews(newsID string) error {
 	objectID, _ := primitive.ObjectIDFromHex(newsID)
-	_, err := newsCollection(u.Client).DeleteOne(context.Background(), bson.M{
+	_, err := newsCollection(n.Client).DeleteOne(context.Background(), bson.M{
 		"_id": objectID,
 	})
 	if err != nil {
