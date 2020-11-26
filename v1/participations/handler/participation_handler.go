@@ -61,7 +61,7 @@ func (p participationHandler) addParticipation(c echo.Context) error {
 	if error != nil {
 		return c.String(http.StatusInternalServerError, "error occurred")
 	}
-	error = json.Unmarshal(marshalParticipations, &participationMap)
+	err = json.Unmarshal(marshalParticipations, &participationMap)
 	if err != nil {
 		return c.Render(http.StatusOK, "participation.html", map[string]interface{}{
 			"data":          participationMap,
