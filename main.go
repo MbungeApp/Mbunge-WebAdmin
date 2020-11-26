@@ -56,9 +56,9 @@ func main() {
 
 	templates["login.html"] = template.Must(template.ParseFiles("v1/templates/login.html", "v1/templates/base/base.html"))
 	templates["dashboard.html"] = template.Must(template.ParseFiles("v1/templates/dashboard.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
-	templates["participation.html"] = template.Must(template.ParseFiles("v1/templates/participation.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
-	templates["participation_detail.html"] = template.Must(template.ParseFiles("v1/templates/participation_detail.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
-	templates["participation_edit.html"] = template.Must(template.ParseFiles("v1/templates/participation_edit.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
+	templates["participation.html"] = template.Must(template.ParseFiles("v1/templates/participation/participation.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
+	templates["participation_detail.html"] = template.Must(template.ParseFiles("v1/templates/participation/participation_detail.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
+	templates["participation_edit.html"] = template.Must(template.ParseFiles("v1/templates/participation/participation_edit.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
 	}
@@ -74,7 +74,7 @@ func main() {
 	dashboardService := _dashboardService.NewDashboardServiceImpl(session)
 	_dashboardHandler.NewDashboardHandler(e, dashboardService)
 
-	participationService := _participationService.NewparticipationServiceImpl(session)
+	participationService := _participationService.NewParticipationServiceImpl(session)
 	_participationHandler.NewParticipationHandler(e, participationService)
 
 	_loginHandler.NewLoginHandler(e)
