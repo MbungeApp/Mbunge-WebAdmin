@@ -20,6 +20,8 @@ type MP struct {
 	DateBirth     time.Time          `json:"date_birth" bson:"date_birth"`
 	Bio           string             `json:"bio" bson:"bio"`
 	Images        []string           `json:"images" bson:"images"`
+	CreatedAt     time.Time          `json:"created_at" bson:"created_at" form:"created_at"`
+	UpdatedAt     time.Time          `json:"updated_at" bson:"updated_at" form:"updated_at"`
 }
 
 type MpLive struct {
