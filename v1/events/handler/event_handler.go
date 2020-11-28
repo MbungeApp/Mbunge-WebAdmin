@@ -47,11 +47,11 @@ func (e eventHandler) getAllEvents(c echo.Context) error {
 func (e eventHandler) addEvent(c echo.Context) error {
 	eventReq := new(request.EventRequest)
 	if err := c.Bind(eventReq); err != nil {
-		return err
+		return c.String(http.StatusInternalServerError, "error occurred")
 	}
 	err := e.eventService.AddEvent(eventReq)
 	if err != nil {
-		return err
+		return c.String(http.StatusInternalServerError, "error occurred")
 	}
 	return c.Redirect(http.StatusFound, "/event")
 }
@@ -78,11 +78,11 @@ func (e eventHandler) edit1Event(c echo.Context) error {
 	id := c.Param("id")
 	eventReq := new(request.EventRequest)
 	if err := c.Bind(eventReq); err != nil {
-		return err
+		return c.String(http.StatusInternalServerError, "error occurred")
 	}
 	err := e.eventService.EditEvent(id, eventReq)
 	if err != nil {
-		return err
+		return c.String(http.StatusInternalServerError, "error occurred")
 	}
 	return c.Redirect(http.StatusFound, "/event")
 }
