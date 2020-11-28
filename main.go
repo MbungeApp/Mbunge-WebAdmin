@@ -21,6 +21,8 @@ import (
 	_eventService "mbunge-admin/v1/events/service"
 	_homeHandler "mbunge-admin/v1/home/handler"
 	_loginHandler "mbunge-admin/v1/login/handler"
+	_mpHandler "mbunge-admin/v1/mp/handler"
+	_mpService "mbunge-admin/v1/mp/service"
 	_participationHandler "mbunge-admin/v1/participations/handler"
 	_participationService "mbunge-admin/v1/participations/service"
 )
@@ -64,6 +66,9 @@ func main() {
 	templates["event.html"] = template.Must(template.ParseFiles("v1/templates/event/event.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	templates["event_detail.html"] = template.Must(template.ParseFiles("v1/templates/event/event_detail.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	templates["event_edit.html"] = template.Must(template.ParseFiles("v1/templates/event/event_edit.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
+	templates["mp.html"] = template.Must(template.ParseFiles("v1/templates/mp/mp.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
+	templates["mp_detail.html"] = template.Must(template.ParseFiles("v1/templates/mp/mp_detail.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
+	templates["mp_edit.html"] = template.Must(template.ParseFiles("v1/templates/mp/mp_edit.html", "v1/templates/base/base.html", "v1/templates/base/sidebar.html"))
 	e.Renderer = &TemplateRegistry{
 		templates: templates,
 	}
@@ -87,8 +92,11 @@ func main() {
 	eventService := _eventService.NewEventServiceImpl(session)
 	_eventHandler.NewEventHandler(e, eventService)
 
+	mpService := _mpService.NewMpServiceImpl(session)
+	_mpHandler.NewMpHandler(e, mpService)
+
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	e.Logger.Fatal(e.Start(":" + "1323"))
+	e.Logger.Fatal(e.Start(":" + "8080"))
 }
