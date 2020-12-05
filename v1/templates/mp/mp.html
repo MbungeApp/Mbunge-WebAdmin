@@ -1,4 +1,10 @@
 {{define "content"}}
+    <link rel="stylesheet" type="text/css" href="/static/css/stream.css"/>
+    <script>
+        console.log('{{index . "data"}}');
+
+    </script>
+    <script src="/static/js/AgoraRTCSDK-3.1.1.js"></script>
     <div id="wrapper">
         {{template "sidebar" .}}
         <div class="d-flex flex-column" id="content-wrapper">
@@ -48,30 +54,30 @@
                                 <div class="card shadow">
                                     <div class="card-body">
                                         <div class="row row-cols-3 ">
-{{/*                                            {{range $index, $element := index . "data"}}*/}}
-{{/*                                                <div class="col" style="margin-bottom: 10px;">*/}}
-{{/*                                                    <div class="card">*/}}
-{{/*                                                        <img class="card-img-top" src={{$element.picture}}>*/}}
-{{/*                                                        <div class="card-body">*/}}
-{{/*                                                            <h4 class="card-title">*/}}
-{{/*                                                                {{  printf "%.50s" $element.name}}...*/}}
-{{/*                                                            </h4>*/}}
-{{/*                                                            <h6 class="text-muted card-subtitle mb-2" id="{{$element.id}}">*/}}
-{{/*                                                                <script>*/}}
-{{/*                                                                    var dateObject = new Date(Date.parse({{$element.created_at}}));*/}}
-{{/*                                                                    document.getElementById({{$element.id}}).innerHTML = dateObject.toDateString();*/}}
-{{/*                                                                </script>*/}}
-{{/*                                                            </h6>*/}}
-{{/*                                                            <p class="card-text">*/}}
-{{/*                                                                {{ printf "%.450s" $element.body }}...*/}}
-{{/*                                                            </p>*/}}
-{{/*                                                            <a class="card-link"*/}}
-{{/*                                                               href="/event/edit/{{$element.id}}">Edit</a>*/}}
-{{/*                                                            <a class="card-link" href="/event/delete/{{$element.id}}">Delete</a>*/}}
-{{/*                                                        </div>*/}}
-{{/*                                                    </div>*/}}
-{{/*                                                </div>*/}}
-{{/*                                            {{end}}*/}}
+                                            {{range $index, $element := index . "data"}}
+                                                <div class="col" style="margin-bottom: 10px;">
+                                                    <div class="card">
+                                                        <img height=300px class="card-img-top" src={{$element.image}}>
+                                                        <div class="card-body">
+                                                            <h4 class="card-title">
+                                                                {{  printf "%.80s" $element.name}}...
+                                                            </h4>
+                                                            <h6 class="text-muted card-subtitle mb-2" id="{{$element.id}}">
+                                                                <script>
+                                                                    var dateObject = new Date(Date.parse({{$element.date_birth}}));
+                                                                    document.getElementById({{$element.id}}).innerHTML = dateObject.toDateString();
+                                                                </script>
+                                                            </h6>
+                                                            <p class="card-text">
+                                                                {{ printf "%.450s" $element.bio }}...
+                                                            </p>
+                                                            <a class="card-link"
+                                                               href="/mp/edit/{{$element.id}}">Edit</a>
+                                                            <a class="card-link" href="/mp/delete/{{$element.id}}">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {{end}}
                                         </div>
                                     </div>
                                 </div>
@@ -81,77 +87,56 @@
                                     <div class="card-body">
                                         <p class="card-text">Fields with * are a must</p>
                                         <div class="col">
-                                            <form>
-                                                <p style="margin-bottom: 2px;">Name</p><input class="form-control"
-                                                                                              type="text"
-                                                                                              style="margin-bottom: 16px;">
-                                                <p style="margin-bottom: 2px;">Picture</p><input class="form-control"
-                                                                                                 type="text"
-                                                                                                 style="margin-bottom: 16px;">
+                                            <form action="/mp/add" method="POST">
+                                                <p style="margin-bottom: 2px;">Name</p>
+                                                <input name="name" class="form-control" type="text" style="margin-bottom: 16px;" required>
+                                                <p style="margin-bottom: 2px;">Picture</p>
+                                                <input name="picture" class="form-control"  type="text" style="margin-bottom: 16px;" required>
                                                 <div class="form-row">
                                                     <div class="col">
                                                         <p style="margin-bottom: 2px;">Constituency</p>
-                                                        <div class="dropdown">
-                                                            <button
-                                                                    class="btn btn-primary dropdown-toggle text-left"
-                                                                    data-toggle="dropdown" aria-expanded="false"
-                                                                    type="button"
-                                                                    style="background-color: rgb(255,255,255);color: rgb(0,0,0);width: 100%;margin-bottom: 16px;">
-                                                                Agriculture&nbsp;
-                                                            </button>
-                                                            <div class="dropdown-menu"><a class="dropdown-item"
-                                                                                          href="#">First Item</a><a
-                                                                        class="dropdown-item"
-                                                                        href="#">Second Item</a><a class="dropdown-item"
-                                                                                                   href="#">Third
-                                                                    Item</a></div>
-                                                        </div>
+                                                        <select class="dropdown" id="constituency" name="constituency" required>
+                                                            <option class="dropdown-item" value="Bahati">Bahati</option>
+                                                            <option class="dropdown-item" value="Kawangware">Kawangware</option>
+                                                            <option class="dropdown-item" value="Manufacturing">Manufacturing</option>
+                                                            <option class="dropdown-item" value="Transport and Infrastructure">Transport and Infrastructure</option>
+                                                            <option class="dropdown-item" value="ICT">ICT</option>
+                                                            <option class="dropdown-item" value="Building and Construction">Building and Construction</option>
+                                                            <option class="dropdown-item" value="Governance">Governance</option>
+                                                            <option class="dropdown-item" value="Education">Education</option>
+                                                        </select>
                                                     </div>
                                                     <div class="col">
                                                         <p style="margin-bottom: 2px;">County</p>
-                                                        <div class="dropdown">
-                                                            <button
-                                                                    class="btn btn-primary dropdown-toggle text-left"
-                                                                    data-toggle="dropdown" aria-expanded="false"
-                                                                    type="button"
-                                                                    style="background-color: rgb(255,255,255);color: rgb(0,0,0);width: 100%;">
-                                                                Agriculture&nbsp;
-                                                            </button>
-                                                            <div class="dropdown-menu"><a class="dropdown-item"
-                                                                                          href="#">First Item</a><a
-                                                                        class="dropdown-item"
-                                                                        href="#">Second Item</a><a class="dropdown-item"
-                                                                                                   href="#">Third
-                                                                    Item</a></div>
-                                                        </div>
+                                                        <select class="dropdown" id="county" name="county" required>
+                                                            <option class="dropdown-item" value="Nakuru">Nakuru</option>
+                                                            <option class="dropdown-item" value="Nairobi">Nairobi</option>
+                                                            <option class="dropdown-item" value="Manufacturing">Manufacturing</option>
+                                                            <option class="dropdown-item" value="Transport and Infrastructure">Transport and Infrastructure</option>
+                                                            <option class="dropdown-item" value="ICT">ICT</option>
+                                                            <option class="dropdown-item" value="Building and Construction">Building and Construction</option>
+                                                            <option class="dropdown-item" value="Governance">Governance</option>
+                                                            <option class="dropdown-item" value="Education">Education</option>
+                                                        </select>
                                                     </div>
                                                     <div class="col">
                                                         <p style="margin-bottom: 2px;">Martial Status</p>
-                                                        <div class="dropdown">
-                                                            <button
-                                                                    class="btn btn-primary dropdown-toggle text-left"
-                                                                    data-toggle="dropdown" aria-expanded="false"
-                                                                    type="button"
-                                                                    style="background-color: rgb(255,255,255);color: rgb(0,0,0);width: 100%;">
-                                                                Agriculture&nbsp;
-                                                            </button>
-                                                            <div class="dropdown-menu"><a class="dropdown-item"
-                                                                                          href="#">First Item</a><a
-                                                                        class="dropdown-item"
-                                                                        href="#">Second Item</a><a class="dropdown-item"
-                                                                                                   href="#">Third
-                                                                    Item</a></div>
-                                                        </div>
+                                                        <select class="dropdown" id="martial_status" name="martial_status" required>
+                                                            <option class="dropdown-item" value="Agriculture">Married</option>
+                                                            <option class="dropdown-item" value="Tourism">Single</option>
+                                                            <option class="dropdown-item" value="Manufacturing">Divorced</option>
+                                                            <option class="dropdown-item" value="Manufacturing">Widower</option>
+                                                            <option class="dropdown-item" value="Manufacturing">Undisclosed</option>
+                                                        </select>
                                                     </div>
                                                 </div>
-                                                <p style="margin-bottom: 2px;">Date of Birth</p><input
-                                                        class="form-control" type="date" style="margin-bottom: 16px;">
-                                                <p style="margin-bottom: 2px;">Bio</p><input class="form-control"
-                                                                                             type="text"
-                                                                                             style="margin-bottom: 16px;">
-                                                <button
-                                                        class="btn btn-primary" type="button"
-                                                        style="background: rgb(0,8,224);">Add MP
+                                                <br>
+                                                <p style="margin-bottom: 2px;">Date of Birth</p>
+                                                <input name="date_of_birth" class="form-control" type="date" style="margin-bottom: 16px;" required>
+                                                <p style="margin-bottom: 2px;">Bio</p>
+                                                <textarea name="bio" class="form-control" type="text" style="margin-bottom: 16px;" rows="10" required>  </textarea>
+                                                <button class="btn btn-primary" type="submit"style="background: rgb(0,8,224);">
+                                                    Add MP
                                                 </button>
                                             </form>
                                         </div>
@@ -186,7 +171,8 @@
                                         <h6 class="text-primary font-weight-bold m-0">Start livestream</h6>
                                         <div class="btn-group" role="group">
                                             <button class="btn btn-primary"
-                                                    type="button" style="background: rgb(78,223,127);">start
+                                                    type="button" style="background: rgb(78,223,127);">
+                                                start
                                             </button>
                                             <button
                                                     class="btn btn-primary" type="button"
@@ -195,9 +181,46 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col"></div>
-                                            <div class="col"></div>
+                                        <div class="col">
+                                            <div class="container-fluid p-0">
+                                                <div id="main-container">
+                                                    <div id="screen-share-btn-container" class="col-2 float-right text-right mt-2">
+                                                        <button id="screen-share-btn"  type="button" class="btn btn-lg">
+                                                            <i id="screen-share-icon" class="fab fa-slideshare"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div id="buttons-container" class="row justify-content-center mt-3">
+                                                        <div id="audio-controls" class="col-md-2 text-center btn-group">
+                                                            <button id="mic-btn" type="button" class="btn btn-block btn-dark btn-lg">
+                                                                <i id="mic-icon" class="fas fa-microphone"></i>
+                                                            </button>
+                                                            <button id="mic-dropdown" type="button" class="btn btn-lg btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <span class="sr-only">Toggle Dropdown</span>
+                                                            </button>
+                                                            <div id="mic-list" class="dropdown-menu dropdown-menu-right">
+                                                            </div>
+                                                        </div>
+                                                        <div id="video-controls" class="col-md-2 text-center btn-group">
+                                                            <button id="video-btn"  type="button" class="btn btn-block btn-dark btn-lg">
+                                                                <i id="video-icon" class="fas fa-video"></i>
+                                                            </button>
+                                                            <button id="cam-dropdown" type="button" class="btn btn-lg btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <span class="sr-only">Toggle Dropdown</span>
+                                                            </button>
+                                                            <div id="camera-list" class="dropdown-menu dropdown-menu-right">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 text-center">
+                                                            <button id="exit-btn"  type="button" class="btn btn-block btn-danger btn-lg">
+                                                                <i id="exit-icon" class="fas fa-phone-slash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div id="full-screen-video"></div>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
@@ -214,4 +237,13 @@
         </div>
         <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
+    <script>
+        $("#mic-btn").prop("disabled", true);
+        $("#video-btn").prop("disabled", true);
+        $("#screen-share-btn").prop("disabled", true);
+        $("#exit-btn").prop("disabled", true);
+        $("#add-rtmp-btn").prop("disabled", true);
+    </script>
+    <script src="/static/js/agora-broadcast-client.js"></script>
+    <script src="/static/js/ui.js"></script>
 {{end}}
