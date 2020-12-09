@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	configPath = "/var/www/go/mbunge-admin/config/config.ini"
+	configPath = "/var/www/go/Mbunge-Admin/config/config.ini"
 )
 
 var dbUrl, sentryKey string
