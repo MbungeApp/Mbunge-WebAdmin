@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	configPath = "config/config.ini"
+	configPath = "/var/www/go/mbunge-admin/config/config.ini"
 )
 
 var dbUrl, sentryKey string
@@ -81,12 +81,6 @@ func ConnectDB() *mongo.Client {
 		log.Fatal(err)
 	}
 	log.Println("Connected")
-	// defer func() {
-	// 	log.Println("DB disconnected from main")
-	// 	err := client.Disconnect(context.Background())
-	// 	if err != nil {
-	// 		log.Println("db disc err ", err)
-	// 	}
-	// }()
+
 	return client
 }
