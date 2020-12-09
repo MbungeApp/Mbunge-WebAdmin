@@ -6,9 +6,11 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -27,13 +29,17 @@ import (
 	_participationService "mbunge-admin/v1/participations/service"
 )
 
+func init() {
+	// setup the config ini path
+}
+
 // TemplateRegistry ..
 type TemplateRegistry struct {
 	templates map[string]*template.Template
 }
 
 // Render Implement e.Renderer interface
-func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, _ echo.Context) error {
 	tmpl, ok := t.templates[name]
 	if !ok {
 		err := errors.New("Template not found -> " + name)
@@ -98,5 +104,12 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	defer func() {
+		log.Println("DB disconnected from main")
+		err := session.Disconnect(context.Background())
+		if err != nil {
+			log.Println("db disc err ", err)
+		}
+	}()
 	e.Logger.Fatal(e.Start(":" + "8080"))
 }

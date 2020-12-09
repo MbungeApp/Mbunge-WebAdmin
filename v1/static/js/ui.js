@@ -4,8 +4,7 @@ function enableUiControls() {
 
   $("#mic-btn").prop("disabled", false);
   $("#video-btn").prop("disabled", false);
-  $("#exit-btn").prop("disabled", false);
-  $("#add-rtmp-btn").prop("disabled", false);
+  // $("#exit-btn").prop("disabled", false);
 
   $("#mic-btn").click(function(){
     toggleMic();
@@ -50,11 +49,21 @@ function enableUiControls() {
         break; 
       case "q":
         console.log("so sad to see you quit the channel");
-        leaveChannel(); 
+        toggleJoinOrLeave();
         break;   
       default:  // do nothing
     }
   });
+}
+function toggleJoinOrLeave(){
+  $("#exit-icon").toggleClass('fa-phone').toggleClass('fa-phone-slash'); // toggle the exit icon
+  if ($("#mic-icon").hasClass('fa-phone')) {
+    console.log("############# Join #############");
+    joinChannel(); // start the stream
+  } else {
+    console.log("############# Leave #############");
+    leaveChannel(); // end stream
+  }
 }
 
 function toggleBtn(btn){

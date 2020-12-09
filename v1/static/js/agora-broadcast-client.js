@@ -58,7 +58,7 @@ AgoraRTC.Logger.setLogLevel(AgoraRTC.Logger.DEBUG);
 // init Agora SDK
 client.init(agoraAppId, function () {
   console.log('AgoraRTC client initialized');
-  joinChannel(); // join channel upon successfull init
+  // joinChannel(); // join channel upon successfull init
 }, function (err) {
   console.log('[ERROR] : AgoraRTC client init failed', err);
 });

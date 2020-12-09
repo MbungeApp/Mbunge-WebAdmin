@@ -43,10 +43,7 @@
                                 <a class="nav-link " role="tab" data-toggle="tab" href="#tab-2">Add</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link " role="tab" data-toggle="tab" href="#tab-3">MP ofthe Week</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" role="tab" data-toggle="tab" href="#tab-4">Stream</a>
+                                <a class="nav-link" role="tab" data-toggle="tab" href="#tab-3">Stream</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -134,7 +131,7 @@
                                                 <p style="margin-bottom: 2px;">Date of Birth</p>
                                                 <input name="date_of_birth" class="form-control" type="date" style="margin-bottom: 16px;" required>
                                                 <p style="margin-bottom: 2px;">Bio</p>
-                                                <textarea name="bio" class="form-control" type="text" style="margin-bottom: 16px;" rows="10" required>  </textarea>
+                                                <textarea name="bio" class="form-control" style="margin-bottom: 16px;" rows="10" required>  </textarea>
                                                 <button class="btn btn-primary" type="submit"style="background: rgb(0,8,224);">
                                                     Add MP
                                                 </button>
@@ -148,79 +145,21 @@
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h6 class="text-primary font-weight-bold m-0">Start livestream</h6>
                                         <div class="btn-group" role="group">
-                                            <button class="btn btn-primary"
-                                                    type="button" style="background: rgb(78,223,127);">start
+                                            <button id="exit-btn"  type="button" class="btn btn-danger">
+                                                <i id="exit-icon" class="fas fa-phone"></i>
                                             </button>
-                                            <button
-                                                    class="btn btn-primary" type="button"
-                                                    style="background: rgb(223,78,78);">&nbsp;end
+                                            <button id="mic-btn" type="button" class="btn btn-dark">
+                                                <i id="mic-icon" class="fas fa-microphone"></i>
                                             </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col"></div>
-                                            <div class="col"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" role="tabpanel" id="tab-4">
-                                <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h6 class="text-primary font-weight-bold m-0">Start livestream</h6>
-                                        <div class="btn-group" role="group">
-                                            <button class="btn btn-primary"
-                                                    type="button" style="background: rgb(78,223,127);">
-                                                start
+                                            <button id="video-btn"  type="button" class="btn btn-dark">
+                                                <i id="video-icon" class="fas fa-video"></i>
                                             </button>
-                                            <button
-                                                    class="btn btn-primary" type="button"
-                                                    style="background: rgb(223,78,78);">&nbsp;end
-                                            </button>
+
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="col">
-                                            <div class="container-fluid p-0">
-                                                <div id="main-container">
-                                                    <div id="screen-share-btn-container" class="col-2 float-right text-right mt-2">
-                                                        <button id="screen-share-btn"  type="button" class="btn btn-lg">
-                                                            <i id="screen-share-icon" class="fab fa-slideshare"></i>
-                                                        </button>
-                                                    </div>
-                                                    <div id="buttons-container" class="row justify-content-center mt-3">
-                                                        <div id="audio-controls" class="col-md-2 text-center btn-group">
-                                                            <button id="mic-btn" type="button" class="btn btn-block btn-dark btn-lg">
-                                                                <i id="mic-icon" class="fas fa-microphone"></i>
-                                                            </button>
-                                                            <button id="mic-dropdown" type="button" class="btn btn-lg btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <span class="sr-only">Toggle Dropdown</span>
-                                                            </button>
-                                                            <div id="mic-list" class="dropdown-menu dropdown-menu-right">
-                                                            </div>
-                                                        </div>
-                                                        <div id="video-controls" class="col-md-2 text-center btn-group">
-                                                            <button id="video-btn"  type="button" class="btn btn-block btn-dark btn-lg">
-                                                                <i id="video-icon" class="fas fa-video"></i>
-                                                            </button>
-                                                            <button id="cam-dropdown" type="button" class="btn btn-lg btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <span class="sr-only">Toggle Dropdown</span>
-                                                            </button>
-                                                            <div id="camera-list" class="dropdown-menu dropdown-menu-right">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 text-center">
-                                                            <button id="exit-btn"  type="button" class="btn btn-block btn-danger btn-lg">
-                                                                <i id="exit-icon" class="fas fa-phone-slash"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div id="full-screen-video"></div>
-
-                                                </div>
-                                            </div>
-                                        </div>
+                                            <div id="full-screen-video"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -236,13 +175,12 @@
             </footer>
         </div>
         <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    </div>
+
     <script>
         $("#mic-btn").prop("disabled", true);
         $("#video-btn").prop("disabled", true);
         $("#screen-share-btn").prop("disabled", true);
-        $("#exit-btn").prop("disabled", true);
-        $("#add-rtmp-btn").prop("disabled", true);
+        // $("#exit-btn").prop("disabled", true);
     </script>
     <script src="/static/js/agora-broadcast-client.js"></script>
     <script src="/static/js/ui.js"></script>
