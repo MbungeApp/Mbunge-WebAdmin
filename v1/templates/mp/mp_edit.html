@@ -1,0 +1,159 @@
+{{define "content"}}
+    <script>
+        console.log('{{index .}}');
+
+    </script>
+    <div id="wrapper">
+        {{template "sidebar" .}}
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid">
+                        <ul class="nav navbar-nav flex-nowrap ml-auto">
+                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow">
+                                    <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false"
+                                       href="#">
+                                        <span class="d-none d-lg-inline mr-2 text-gray-600 small">Valerie Luna</span>
+                                        <img class="border rounded-circle img-profile"
+                                             src="assets/img/avatars/avatar1.jpeg">
+                                    </a>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in">
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;
+                                            Logout
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                        <h3 class="text-dark mb-0">Parliaments Members</h3>
+                    </div>
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">Edit</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+
+                            <div class="tab-pane active" role="tabpanel" id="tab-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text">Fields with * are a must</p>
+                                        <div class="col">
+                                            <form action="/mp/edit/{{.id}}" method="POST">
+                                                <p style="margin-bottom: 2px;">Name</p>
+                                                <input value={{ .name }} name="name" class="form-control" type="text"
+                                                       style="margin-bottom: 16px;" required>
+                                                <p style="margin-bottom: 2px;">Picture</p>
+                                                <input value={{ .image }} name="picture" class="form-control" type="text"
+                                                       style="margin-bottom: 16px;" required>
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <p style="margin-bottom: 2px;">Constituency</p>
+                                                        <select class="dropdown" id="constituency" name="constituency"
+                                                                required>
+                                                            <option class="dropdown-item" value="Bahati">Bahati</option>
+                                                            <option class="dropdown-item" value="Kawangware">
+                                                                Kawangware
+                                                            </option>
+                                                            <option class="dropdown-item" value="Manufacturing">
+                                                                Manufacturing
+                                                            </option>
+                                                            <option class="dropdown-item"
+                                                                    value="Transport and Infrastructure">Transport and
+                                                                Infrastructure
+                                                            </option>
+                                                            <option class="dropdown-item" value="ICT">ICT</option>
+                                                            <option class="dropdown-item"
+                                                                    value="Building and Construction">Building and
+                                                                Construction
+                                                            </option>
+                                                            <option class="dropdown-item" value="Governance">
+                                                                Governance
+                                                            </option>
+                                                            <option class="dropdown-item" value="Education">Education
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <p style="margin-bottom: 2px;">County</p>
+                                                        <select class="dropdown" id="county" name="county" required>
+                                                            <option class="dropdown-item" value="Nakuru">Nakuru</option>
+                                                            <option class="dropdown-item" value="Nairobi">Nairobi
+                                                            </option>
+                                                            <option class="dropdown-item" value="Manufacturing">
+                                                                Manufacturing
+                                                            </option>
+                                                            <option class="dropdown-item"
+                                                                    value="Transport and Infrastructure">Transport and
+                                                                Infrastructure
+                                                            </option>
+                                                            <option class="dropdown-item" value="ICT">ICT</option>
+                                                            <option class="dropdown-item"
+                                                                    value="Building and Construction">Building and
+                                                                Construction
+                                                            </option>
+                                                            <option class="dropdown-item" value="Governance">
+                                                                Governance
+                                                            </option>
+                                                            <option class="dropdown-item" value="Education">Education
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <p style="margin-bottom: 2px;">Martial Status</p>
+                                                        <select class="dropdown" id="martial_status"
+                                                                name="martial_status" required>
+                                                            <option class="dropdown-item" value="Agriculture">Married
+                                                            </option>
+                                                            <option class="dropdown-item" value="Tourism">Single
+                                                            </option>
+                                                            <option class="dropdown-item" value="Manufacturing">
+                                                                Divorced
+                                                            </option>
+                                                            <option class="dropdown-item" value="Manufacturing">
+                                                                Widower
+                                                            </option>
+                                                            <option class="dropdown-item" value="Manufacturing">
+                                                                Undisclosed
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <p style="margin-bottom: 2px;">Date of Birth</p>
+                                                <input value={{ .date_birth }} name="date_of_birth" class="form-control" type="date"
+                                                       style="margin-bottom: 16px;" required>
+                                                <p style="margin-bottom: 2px;">Bio</p>
+                                                <textarea name="bio" class="form-control" type="text"
+                                                          style="margin-bottom: 16px;" rows="10" required>{{ .bio }}</textarea>
+                                                <button class="btn btn-primary" type="submit"
+                                                        style="background: rgb(0,8,224);">
+                                                    Edit MP
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © mbunge 2020</span></div>
+                </div>
+            </footer>
+        </div>
+        <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+{{end}}
