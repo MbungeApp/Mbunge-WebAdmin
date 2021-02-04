@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:mbungeweb/utils/logger.dart';
 
 class HttpClient {
@@ -49,6 +53,31 @@ class HttpClient {
         baseUrl(endpoint),
       );
       AppLogger.logInfo("deleteRequest:\nurl:$endpoint\nresponse:\n$response");
+      return response;
+    } catch (e) {
+      AppLogger.logError(e);
+      throw e;
+    }
+  }
+
+  Future<http.StreamedResponse> uploadFile({
+    @required String endpoint,
+    @required Map<String, dynamic> map,
+    @required String assetPath,
+  }) async {
+    try {
+      var postUri = Uri.parse(baseUrl(endpoint));
+      var request = http.MultipartRequest("POST", postUri);
+      request.fields.addAll(map);
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'picture',
+          await File.fromUri(Uri.parse(assetPath)).readAsBytes(),
+          contentType: MediaType('image', 'jpeg'),
+        ),
+      );
+
+      http.StreamedResponse response = await request.send();
       return response;
     } catch (e) {
       AppLogger.logError(e);
