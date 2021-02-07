@@ -1,8 +1,8 @@
-import 'dart:io';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:mbungeweb/utils/logger.dart';
 
 class HttpClient {
@@ -34,12 +34,19 @@ class HttpClient {
     String endpoint,
     Map<String, dynamic> body,
   ) async {
+    Map<String, String> headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
     try {
       http.Response response = await http.Client().post(
         baseUrl(endpoint),
-        body: body,
+        body: json.encode(body),
+        headers: headers,
       );
-      AppLogger.logInfo("postRequest:\nurl:$endpoint\nresponse:\n$response");
+      AppLogger.logInfo(
+        "postRequest:\nurl:$endpoint\nresponse:\n${response.statusCode}",
+      );
       return response;
     } catch (e) {
       AppLogger.logError(e);
@@ -52,7 +59,9 @@ class HttpClient {
       http.Response response = await http.Client().delete(
         baseUrl(endpoint),
       );
-      AppLogger.logInfo("deleteRequest:\nurl:$endpoint\nresponse:\n$response");
+      AppLogger.logInfo(
+        "deleteRequest:\nurl:$endpoint\nresponse:\n${response.body}",
+      );
       return response;
     } catch (e) {
       AppLogger.logError(e);
@@ -60,24 +69,24 @@ class HttpClient {
     }
   }
 
-  Future<http.StreamedResponse> uploadFile({
+  Future<http.Response> uploadFile({
     @required String endpoint,
-    @required Map<String, dynamic> map,
-    @required String assetPath,
+    @required Map<String, String> map,
+    @required Uint8List imageBytes,
   }) async {
     try {
       var postUri = Uri.parse(baseUrl(endpoint));
       var request = http.MultipartRequest("POST", postUri);
       request.fields.addAll(map);
-      request.files.add(
-        http.MultipartFile.fromBytes(
-          'picture',
-          await File.fromUri(Uri.parse(assetPath)).readAsBytes(),
-          contentType: MediaType('image', 'jpeg'),
-        ),
+      request.fields['picture'] = base64Encode(imageBytes);
+      http.StreamedResponse res = await request.send();
+      var response = await http.Response.fromStream(res);
+      AppLogger.logInfo(
+        "uploadFile:\nurl:$endpoint\nresponse:${response.statusCode}",
       );
-
-      http.StreamedResponse response = await request.send();
+      AppLogger.logInfo(
+        "uploadFile:\nurl:$endpoint\nresponse:${response.body}",
+      );
       return response;
     } catch (e) {
       AppLogger.logError(e);
