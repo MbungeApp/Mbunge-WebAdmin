@@ -89,7 +89,6 @@ function streamAdded() {
   });
 }
 
-
 client.on('stream-subscribed', function (evt) {
   var remoteStream = evt.stream;
   var remoteId = remoteStream.getId();
