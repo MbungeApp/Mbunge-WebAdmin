@@ -24,11 +24,17 @@ class MpRepo {
     }
   }
 
-  Future<String> addMp(AddMpModel model) async {
-    http.Response response = await httpClient.postRequest(
-      "/dashoard/mp/add",
-      model.toJson(),
+  Future<String> addMp({
+    @required AddMpModel model,
+    @required Uint8List imageBytes,
+  }) async {
+    print("Reached add mp repo");
+    http.Response response = await httpClient.uploadFile(
+      endpoint: "/dashboard/mp/add",
+      map: model.toJson(),
+      imageBytes: imageBytes,
     );
+    print("Reached add mp repo sucessfully");
     if (response != null && response.statusCode == 201) {
       return response.body;
     } else {
