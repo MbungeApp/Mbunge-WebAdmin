@@ -6,13 +6,15 @@ import 'package:mbungeweb/screens/home/home_page.dart';
 import 'package:mbungeweb/utils/colors.dart';
 import 'package:mbungeweb/utils/routes.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:statsfl/statsfl.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   runApp(
-    RootRestorationScope(
-      restorationId: 'root',
+    StatsFl(
+      isEnabled: false,
+      maxFps: 120,
       child: MyApp(),
     ),
   );
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Mbunge Web Admin',
       theme: ThemeData(
         scaffoldBackgroundColor: AppColors.whiteColor,
         primarySwatch: Colors.teal,
