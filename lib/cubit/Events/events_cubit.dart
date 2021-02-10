@@ -75,6 +75,7 @@ class EventsCubit extends Cubit<EventsState> {
 
   Future<void> addAnEvent({
     @required AddEventModel model,
+    
     @required Uint8List imageBytes,
   }) async {
     final currentState = state;
