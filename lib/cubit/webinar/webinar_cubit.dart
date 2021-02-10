@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:mbungeweb/models/webinar.dart';
 import 'package:mbungeweb/repository/_repository.dart';
 import 'package:mbungeweb/models/add_webinar.dart';
+import 'package:mbungeweb/utils/logger.dart';
 
 part 'webinar_state.dart';
 
@@ -46,6 +47,7 @@ class WebinarCubit extends Cubit<WebinarState> {
           this.fetchWebinars();
         }
       } catch (e) {
+        AppLogger.logWTF(e.toString());
         emit(
           WebinarSuccess(
             webinars: currentState.webinars,
