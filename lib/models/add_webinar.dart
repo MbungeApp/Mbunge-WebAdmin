@@ -39,6 +39,6 @@ class AddWebinarModel {
         "hosted_by": hostedBy,
         "description": description,
         "duration": duration,
-        "schedule_at": scheduleAt.toIso8601String(),
+        "schedule_at": scheduleAt.toIso8601String() + "Z",
       };
 }

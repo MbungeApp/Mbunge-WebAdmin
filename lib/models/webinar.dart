@@ -3,7 +3,6 @@
 //     final webinarModel = webinarModelFromJson(jsonString);
 
 import 'dart:convert';
-
 List<WebinarModel> webinarModelFromJson(String str) => List<WebinarModel>.from(json.decode(str).map((x) => WebinarModel.fromJson(x)));
 
 String webinarModelToJson(List<WebinarModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
