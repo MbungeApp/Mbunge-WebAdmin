@@ -90,7 +90,7 @@ class _AddAdminPageState extends State<AddAdminPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Please enter user details 😉",
+                                  "Please enter user details",
                                   style: theme.textTheme.subtitle1
                                       .copyWith(fontWeight: FontWeight.w600),
                                 ),

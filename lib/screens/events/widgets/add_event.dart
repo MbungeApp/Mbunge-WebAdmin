@@ -89,7 +89,7 @@ class _AddEventState extends State<AddEventPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Please enter Event/News details 😉",
+                                "Please enter Event/News details",
                                 style: theme.textTheme.subtitle1
                                     .copyWith(fontWeight: FontWeight.w600),
                               ),
