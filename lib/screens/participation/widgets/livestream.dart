@@ -2,13 +2,26 @@ import 'package:agora/agora_view.dart';
 import 'package:flutter/material.dart';
 import 'package:mbungeweb/utils/agora.dart';
 
+enum AgoraState {
+  not_joined,
+  connecting,
+  joined,
+}
+
 class LivestreamPage extends StatefulWidget {
+  final String webinarId;
+  final String agenda;
+  const LivestreamPage({Key key, @required this.webinarId, this.agenda})
+      : super(key: key);
   @override
   _LivestreamPageState createState() => _LivestreamPageState();
 }
 
 class _LivestreamPageState extends State<LivestreamPage> {
+  AgoraState agoraState;
   AgoraClient _agoraClient = AgoraClient();
+  String get _webinarId => widget.webinarId;
+  String get _agenda => widget.agenda;
   ValueNotifier<bool> isJoined = ValueNotifier(false);
 
   @override
@@ -18,11 +31,25 @@ class _LivestreamPageState extends State<LivestreamPage> {
     isJoined.addListener(() {
       setState(() {});
     });
+    agoraState = AgoraState.not_joined;
+  }
+
+  timer() {
+    Future.delayed(
+      Duration(seconds: 6),
+      () {
+        setState(() {
+          agoraState = AgoraState.joined;
+        });
+        isJoined.value = true;
+      },
+    );
   }
 
   @override
   void dispose() {
     isJoined.dispose();
+    agoraState = AgoraState.not_joined;
     _agoraClient.leaveChannel();
     super.dispose();
   }
@@ -31,21 +58,39 @@ class _LivestreamPageState extends State<LivestreamPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: IconThemeData(
           color: Colors.black,
+        ),
+        title: Text(
+          _agenda ?? "",
+          style: TextStyle(color: Colors.black),
         ),
       ),
       body: Row(
         children: [
           Flexible(
             flex: 6,
-            child: Stack(
-              children: [
-                AgoraView(),
-                isJoined.value ? _buildReady() : buildIntial(),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: AgoraView(),
+                  ),
+                  agoraState == AgoraState.connecting
+                      ? Center(
+                          child: Text(
+                            agoraState.toString(),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  isJoined.value ? _buildReady() : buildIntial(),
+                ],
+              ),
             ),
           ),
           Flexible(
@@ -67,7 +112,11 @@ class _LivestreamPageState extends State<LivestreamPage> {
         title: "start",
         icon: Icons.call,
         onTap: () {
-          _agoraClient.joinChannel("test");
+          _agoraClient.joinChannel(_webinarId ?? "");
+          setState(() {
+            agoraState = AgoraState.connecting;
+          });
+          timer();
         },
         bgColor: Colors.green,
       ),
@@ -92,6 +141,10 @@ class _LivestreamPageState extends State<LivestreamPage> {
             title: "end",
             icon: Icons.call_end,
             onTap: () {
+              isJoined.value = false;
+              setState(() {
+                agoraState = AgoraState.not_joined;
+              });
               _agoraClient.leaveChannel();
             },
             bgColor: Colors.red,
