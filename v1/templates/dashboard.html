@@ -1,0 +1,228 @@
+{{define "content"}}
+{{/*<h1>Hello {{index . "name"}}</h1>*/}}
+
+{{/*<p>{{ with $x := index . "reverse" }}*/}}
+{{/*        {{ call $x "foobar" }} &lt;-- this will call the $x with parameter "foobar"*/}}
+{{/*    {{ end }}*/}}
+{{/*</p>*/}}
+<script>
+    console.log('{{.}}');
+</script>
+
+<div id="wrapper">
+    {{template "sidebar" .}}
+    <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+            <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3"
+                        id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                    <form
+                        class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <div class="input-group-append"></div>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+            <div class="container-fluid">
+                <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-dark mb-0">Dashboard</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow border-left-primary py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-primary font-weight-bold text-xs mb-1">
+                                            <span>Users</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{ .card.total_users }}</span></div>
+                                    </div>
+                                    <div class="col-auto"><i
+                                            class="material-icons fa-2x text-gray-300">supervisor_account</i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow border-left-success py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
+                                            <span>participations</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{ .card.total_participation }}</span></div>
+                                    </div>
+                                    <div class="col-auto"><i class="icon ion-ios-book fa-2x text-gray-300"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow border-left-info py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                            <span>Events</span></div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col">
+                                                <div class="text-dark font-weight-bold h5 mb-0 mr-3"><span>{{ .card.total_events }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto"><i class="far fa-calendar-alt fa-2x text-gray-300"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow border-left-warning py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-warning font-weight-bold text-xs mb-1">
+                                            <span>Responses</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{ .card.total_responses }}</span></div>
+                                    </div>
+                                    <div class="col-auto"><i class="material-icons fa-2x text-gray-300"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7 col-xl-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary font-weight-bold m-0">MP ofthe Week</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
+                                        data-toggle="dropdown" aria-expanded="false" type="button"><i
+                                            class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a
+                                            class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item"
+                                            href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item"
+                                            href="#">&nbsp;Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col"><img class="img-fluid" src="https://picsum.photos/200/200"
+                                                loading="lazy" width="400px"></div>
+                                        <div class="col">
+                                            <h5 style="color: rgb(0,0,0);">Hon. Kimani Ngunjiri</h5>
+                                            <h6 style="color: rgb(88,88,88);"><strong>Age</strong>: 54 yrs</h6>
+                                            <h6 style="color: rgb(103,103,103);"><strong>Constituency</strong>: Bahati
+                                            </h6>
+                                            <h6 style="color: rgb(103,103,103);"><strong>County</strong>: Nakuru</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <p style="padding-top: 20px;">It is a long established fact that a reader will be
+                                        distracted by the readable content of a page when looking at its layout. The
+                                        point of using Lorem Ipsum is that it has a more-or-less normal distribution of
+                                        letters,
+                                        as opposed to using 'Content here, content here', making it look like readable
+                                        English. Many desktop publishing packages and web page editors now use Lorem
+                                        Ipsum as their default model text, and a search for 'lorem
+                                        ipsum' will uncover many web sites still in their infancy. Various versions have
+                                        evolved over the years, sometimes by accident, sometimes on purpose (injected
+                                        humour and the like) There are many variations of passages
+                                        of Lorem Ipsum available, but the majority have suffered alteration in some
+                                        form, by injected humour, or randomised words which don't look even slightly
+                                        believable. If you are going to use a passage of Lorem Ipsum
+                                        ...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-xl-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary font-weight-bold m-0">Gender Ratio</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas
+                                        data-bs-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Female&quot;,&quot;Male&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#008070&quot;,&quot;#4e73df&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;{{ .gender_ration.female }}&quot;,&quot;{{ .gender_ration.male }}&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;reverse&quot;:false},&quot;title&quot;:{&quot;display&quot;:false}}}">
+
+                                    </canvas>
+                                </div>
+                                <div class="text-center small mt-4"><span class="mr-2"><i
+                                            class="fas fa-circle text-primary"
+                                            style="color: rgb(0,128,112);"></i>&nbsp;Male</span><span class="mr-2"><i
+                                            class="fas fa-circle text-success"
+                                            style="color: rgb(200,28,111);"></i>&nbsp;Female</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary font-weight-bold m-0">User demography</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
+                                        data-toggle="dropdown" aria-expanded="false" type="button"><i
+                                            class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a
+                                            class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item"
+                                            href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item"
+                                            href="#">&nbsp;Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div  id='map' style='width: 100%; height: 850px;'>
+
+                                </div>
+{{/*                                <iframe allowfullscreen="" frameborder="0"*/}}
+{{/*                                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDtmRctuTX-b6FaDn5VMBDg9UEXSN_93XQ&amp;q=Paris%2C+France&amp;zoom=11"*/}}
+{{/*                                    width="100%" height="800">*/}}
+
+{{/*                                </iframe>*/}}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="bg-white sticky-footer">
+            <div class="container my-auto">
+                <div class="text-center my-auto copyright"><span>Copyright © mbunge 2020</span></div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script>
+    window.onload = (event) => {
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaWFtcGF0byIsImEiOiJja2g0aTBtZWwwNWh6MnhscHphazdxYjJmIn0.YTbOQsa6x1IJ3nLjyAoQ1w';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
+        center: [ 37.9062,0.0236], // starting position [lng, lat]
+        hash:true,
+        interactive:false,
+        zoom: 6 // starting zoom
+
+    });
+    var i;
+    var user_location = {{ .users_location }};
+    for (i = 0; i < user_location.length; i++) {
+        new mapboxgl.Marker()
+            .setLngLat([user_location[i].latitude, user_location[i].longitude])
+            .addTo(map);
+    }
+
+    console.log('page is fully loaded' +event);
+    };
+</script>
+    {{end}}
