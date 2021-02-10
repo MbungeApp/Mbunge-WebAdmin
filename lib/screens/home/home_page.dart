@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:mbungeweb/cubit/login/login_cubit.dart';
+import 'package:mbungeweb/models/user_model.dart';
 import 'package:mbungeweb/screens/home/widget/body.dart';
 import 'package:mbungeweb/screens/home/widget/sidebar.dart';
 
+//token, userModel, loginCubit
 class HomePage extends StatefulWidget {
+  final String token;
+  final UserModel userModel;
+  final LoginCubit loginCubit;
+
+  const HomePage({
+    Key key,
+    @required this.token,
+    @required this.userModel,
+    @required this.loginCubit,
+  }) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -40,6 +53,8 @@ class _HomePageState extends State<HomePage> with RestorationMixin {
             Flexible(
               flex: 2, //1
               child: Sidebar(
+                userModel: widget.userModel,
+                loginCubit: widget.loginCubit,
                 currentIndex: _currentIndex.value,
                 onTap: (value) {
                   setState(() {

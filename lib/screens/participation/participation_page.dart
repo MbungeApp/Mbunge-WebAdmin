@@ -1,9 +1,20 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mbungeweb/cubit/webinar/webinar_cubit.dart';
+import 'package:mbungeweb/models/webinar.dart';
+import 'package:mbungeweb/repository/_repository.dart';
+import 'package:mbungeweb/widgets/activity_overlay.dart';
+import 'package:mbungeweb/widgets/error.dart';
+import 'package:mbungeweb/widgets/loading.dart';
 import 'package:mbungeweb/widgets/page_route_transition.dart';
 import 'package:mbungeweb/widgets/scroll_bar.dart';
 
-import 'livestream.dart';
+import 'widgets/livestream.dart';
+import 'widgets/add_webinar_page.dart';
 
 class ParticipationPage extends StatefulWidget {
   @override
@@ -11,25 +22,46 @@ class ParticipationPage extends StatefulWidget {
 }
 
 class _ParticipationPageState extends State<ParticipationPage>
-    with TickerProviderStateMixin {
-  TabController _tabController;
-  int currentIndex = 0;
+    with SingleTickerProviderStateMixin {
+  WebinarCubit _webinarCubit;
+  ActivityOverlay _activityOverlay;
+  AnimationController _animationController;
   ScrollController scrollController = ScrollController();
+  ValueNotifier<bool> isActivityOpened = ValueNotifier(false);
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        currentIndex = _tabController.index;
-      });
-    });
+    _webinarCubit = WebinarCubit(
+      webinarRepo: WebinarRepo(),
+    );
+    _webinarCubit.fetchWebinars();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 700),
+    );
+    _activityOverlay = ActivityOverlay(
+      context,
+      AddWebinarPage(
+        webinarCubit: _webinarCubit,
+        controller: _animationController,
+        close: () {
+          isActivityOpened.value = false;
+          _animationController.reverse().whenComplete(() {
+            _activityOverlay?.remove();
+          });
+        },
+      ),
+    );
     super.initState();
+    isActivityOpened.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _webinarCubit?.close();
     super.dispose();
   }
 
@@ -37,27 +69,89 @@ class _ParticipationPageState extends State<ParticipationPage>
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return RepaintBoundary(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 28),
-          buildTopPart(theme),
-          SizedBox(height: 28),
-          Flexible(child: buildDataTable()),
-        ],
+      child: GestureDetector(
+        onTap: () {
+          if (_activityOverlay.isVisible()) {
+            _animationController.reverse().whenComplete(() {
+              _activityOverlay?.remove();
+              isActivityOpened.value = false;
+            });
+          }
+        },
+        child: BlocProvider(
+          create: (context) => _webinarCubit,
+          child: ClipRRect(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 28),
+                    buildTopPart(theme),
+                    SizedBox(height: 28),
+                    Flexible(
+                      child: BlocConsumer(
+                        cubit: _webinarCubit,
+                        listener: (context, state) {
+                          if (state is WebinarSuccess) {
+                            if (state.webinarSuccessAction.message != "") {
+                              Fluttertoast.showToast(
+                                msg: state.webinarSuccessAction.message,
+                              );
+                            }
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is WebinarInitial) {
+                            return LoadingWidget();
+                          }
+                          if (state is WebinarError) {
+                            return CustomErrorWidget(
+                              child: Text(state.message),
+                            );
+                          }
+                          if (state is WebinarSuccess) {
+                            final webinars = state.webinars;
+                            return buildDataTable(webinars);
+                          }
+                          return Container();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                isActivityOpened.value
+                    ? Positioned.fill(
+                        child: BackdropFilter(
+                          filter: ui.ImageFilter.blur(
+                            sigmaX: isActivityOpened.value ? 5 : 0,
+                            sigmaY: isActivityOpened.value ? 5 : 0,
+                          ),
+                          child: Container(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink()
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget buildDataTable() {
+  Widget buildDataTable(List<WebinarModel> webinars) {
     List<String> _columns = [
       "Index",
-      "Name",
+      "Agenda",
+      "Guest",
+      "Duration",
+      "Postponed",
+      "Scheduled At",
       "Created At",
-      "Expired At",
-      "Posted By",
-      "Sector",
       "Actions",
     ];
     return ScrollbarListStack(
@@ -92,41 +186,64 @@ class _ParticipationPageState extends State<ParticipationPage>
                     );
                   }).toList(),
                   rows: [
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < webinars.length; i++)
                       DataRow(
                         selected: i % 2 == 0 ? true : false,
                         cells: [
                           DataCell(Text("$i")),
-                          DataCell(Text("Patrick Waweru")),
-                          DataCell(Text("0727751832")),
-                          DataCell(Text("21 Mar 2020")),
-                          DataCell(Text("ksh. 100")),
-                          DataCell(Text("individual")),
+                          DataCell(Text("${webinars[i].agenda}")),
+                          DataCell(Text("${webinars[i].hostedBy}")),
+                          DataCell(Text("${webinars[i].duration}")),
+                          DataCell(Text("${webinars[i].postponed}")),
+                          DataCell(Text("${webinars[i].scheduleAt}")),
+                          DataCell(Text("${webinars[i].createdAt}")),
                           DataCell(
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () {},
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () {},
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.visibility),
-                                  onPressed: () {},
-                                ),
-                              ],
+                            PopupMenuButton(
+                              icon: Icon(Icons.more_vert),
+                              itemBuilder: (BuildContext context) {
+                                return <PopupMenuEntry<String>>[
+                                  PopupMenuItem(
+                                    value: 'edit',
+                                    child: Text("Edit Webinar"),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 'delete',
+                                    child: Text("Delete Webinar"),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 'livestream',
+                                    child: Text("Start Livestream"),
+                                  )
+                                ];
+                              },
+                              onSelected: (myValue) {
+                                switch (myValue) {
+                                  case 'edit':
+                                    debugPrint("Goes to about page");
+                                    break;
+                                  case 'delete':
+                                    _webinarCubit.deleteWebinar(webinars[i].id);
+                                    break;
+                                  case 'livestream':
+                                    Navigator.push(
+                                      context,
+                                      PageRoutes.slide(
+                                        () => LivestreamPage(
+                                          webinarId: webinars[i].id,
+                                          agenda: webinars[i].agenda,
+                                        ),
+                                      ),
+                                    );
+                                    break;
+                                  default:
+                                    debugPrint("error");
+                                }
+                              },
                             ),
                           ),
                         ],
                         onSelectChanged: (value) {
-                          Navigator.push(
-                            context,
-                            PageRoutes.slide(() => LivestreamPage()),
-                          );
-                          print("Values is: ");
+                          return null;
                         },
                       )
                   ],
@@ -144,7 +261,7 @@ class _ParticipationPageState extends State<ParticipationPage>
       children: [
         SizedBox(width: 15),
         Text(
-          "Participation",
+          "Online Webinars",
           style: theme.textTheme.headline5.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -157,35 +274,63 @@ class _ParticipationPageState extends State<ParticipationPage>
             ),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: CupertinoSlidingSegmentedControl(
-            groupValue: currentIndex,
-            children: <int, Widget>{
-              0: Text(
-                "View all",
-                style: TextStyle(
-                  color: currentIndex == 0
-                      ? Colors.white
-                      : CupertinoColors.systemGrey2,
-                  fontSize: 15,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Row(
+              children: [
+                MaterialButton(
+                  elevation: 0.0,
+                  color: Colors.teal,
+                  hoverColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    side: BorderSide(color: Colors.teal),
+                  ),
+                  child: Text(
+                    "Add",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_activityOverlay != null) {
+                      if (_activityOverlay.isVisible()) {
+                        debugPrint("Activity overlay is not visible");
+
+                        _animationController
+                            .reverse()
+                            .whenComplete(() => _activityOverlay.remove());
+                        isActivityOpened.value = false;
+                      } else {
+                        debugPrint("Activity overlay is visible");
+                        isActivityOpened.value = true;
+                        _animationController.forward();
+                        _activityOverlay.show();
+                      }
+                    } else {
+                      debugPrint("Activity overlay is null");
+                    }
+                  },
                 ),
-              ),
-              1: Text(
-                "Add",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: currentIndex == 1
-                      ? Colors.white
-                      : CupertinoColors.systemGrey2,
+                SizedBox(width: 10),
+                MaterialButton(
+                  elevation: 0.0,
+                  color: Colors.teal,
+                  hoverColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    side: BorderSide(color: Colors.teal),
+                  ),
+                  child: Text(
+                    "Export",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  onPressed: () {},
                 ),
-              ),
-            },
-            backgroundColor: Colors.transparent,
-            thumbColor: theme.primaryColor,
-            onValueChanged: (i) {
-              setState(() {
-                _tabController.index = i;
-              });
-            },
+              ],
+            ),
           ),
         ),
         SizedBox(width: 20),
