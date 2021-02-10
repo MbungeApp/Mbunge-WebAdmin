@@ -33,8 +33,8 @@ class AgoraClient {
   Future<void> leaveChannel() async {
     try {
       await Agora.leaveChannel();
-    } on PlatformException {
-      AppLogger.logError('Failed to leave channel.');
+    } catch(e) {
+      AppLogger.logError('Failed to leave channel.\n$e');
     }
   }
 }

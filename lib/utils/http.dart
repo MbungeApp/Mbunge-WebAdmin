@@ -38,6 +38,8 @@ class HttpClient {
       'Content-type': 'application/json',
       'Accept': 'application/json',
     };
+
+    AppLogger.logWarning(json.encode(body));
     try {
       http.Response response = await http.Client().post(
         baseUrl(endpoint),
@@ -45,7 +47,7 @@ class HttpClient {
         headers: headers,
       );
       AppLogger.logInfo(
-        "postRequest:\nurl:$endpoint\nresponse:\n${response.statusCode}",
+        "postRequest:\nurl:$endpoint\nresponse:\n${response.statusCode}\n${response.body}",
       );
       return response;
     } catch (e) {
