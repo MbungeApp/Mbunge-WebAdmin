@@ -1,25 +1,34 @@
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:mbungeweb/models/home_navigation.dart';
 import 'package:mbungeweb/screens/account/login_page.dart';
 import 'package:mbungeweb/screens/home/home_page.dart';
 
 class AppRouter {
   static const String loginRoute = "/login";
-  static const String homeRoute = "/";
+  static const String homeRoute = "/home";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    // final args = settings.arguments;
+    final args = settings.arguments;
 
     switch (settings.name) {
       case loginRoute:
+        List arguments = args;
         return _route(
-          LoginPage(),
+          LoginPage(
+            loginCubit: arguments[0],
+          ),
         );
         break;
       case homeRoute:
+        HomeNavigationModel arguments = args;
         return _route(
-          HomePage(),
+          HomePage(
+            token: arguments.token,
+            userModel: arguments.userModel,
+            loginCubit: arguments.loginCubit,
+          ),
         );
         break;
       default:

@@ -6,6 +6,7 @@ import 'package:mbungeweb/cubit/mp/mp_cubit.dart';
 import 'package:mbungeweb/models/add_mp.dart';
 import 'package:mbungeweb/utils/asset_picker.dart';
 import 'package:mbungeweb/utils/logger.dart';
+import 'package:mbungeweb/utils/constants.dart';
 import 'package:mbungeweb/widgets/scroll_bar.dart';
 
 class AddMpPage extends StatefulWidget {
@@ -41,6 +42,7 @@ class _AddMpPageState extends State<AddMpPage> {
     "undisclosed"
   ];
   String status = "single";
+  String county = "";
   DateTime dateStandardFormat;
   @override
   void initState() {
@@ -159,20 +161,42 @@ class _AddMpPageState extends State<AddMpPage> {
                                         alignment: Alignment.centerLeft,
                                         child: Text("County"),
                                       ),
-                                      TextFormField(
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(),
-                                          ),
-                                        ),
-                                        validator: (value) {
-                                          if (value == null) {
-                                            return "Input cannot be null";
-                                          }
-                                          return null;
-                                        },
-                                        onSaved: (value) {
-                                          addMpModel.county = value;
+                                      // TextFormField(
+                                      //   decoration: InputDecoration(
+                                      //     border: OutlineInputBorder(
+                                      //       borderSide: BorderSide(),
+                                      //     ),
+                                      //   ),
+                                      //   validator: (value) {
+                                      //     if (value == null) {
+                                      //       return "Input cannot be null";
+                                      //     }
+                                      //     return null;
+                                      //   },
+                                      //   onSaved: (value) {
+                                      //     addMpModel.county = value;
+                                      //   },
+                                      // ),
+                                      ListView.builder(
+                                        itemCount: AppConstants.counties.length,
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              county =
+                                                  AppConstants.counties[index];
+                                            },
+                                            child: Chip(
+                                              backgroundColor: county ==
+                                                      AppConstants
+                                                          .counties[index]
+                                                  ? theme.primaryColor
+                                                  : theme.chipTheme
+                                                      .backgroundColor,
+                                              label: Text(
+                                                AppConstants.counties[index],
+                                              ),
+                                            ),
+                                          );
                                         },
                                       ),
                                       SizedBox(height: 10),
@@ -344,6 +368,7 @@ class _AddMpPageState extends State<AddMpPage> {
                                               .validate()) {
                                             _formKey.currentState.save();
                                             addMpModel.martialStatus = status;
+                                            addMpModel.county = county;
                                             AppLogger.logVerbose(
                                                 addMpModel.toJson().toString());
                                             _mpCubit.addMp(

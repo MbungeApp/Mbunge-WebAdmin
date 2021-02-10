@@ -10,6 +10,23 @@ class AdminRepo {
   final httpClient = HttpClient();
 
   // Methods
+  Future<UserModel> loginUser(Map<String, dynamic> credentials) async {
+    http.Response response = await httpClient.postRequest(
+      "/dashboard/management/sign_in",
+      credentials,
+    );
+    if (response.statusCode == 201) {
+      final user = userModelFromJson(response.body);
+      if (user.token == "") {
+        return null;
+      } else {
+        return user;
+      }
+    } else {
+      return null;
+    }
+  }
+
   Future<List<AdminModel>> getHttpAdmins() async {
     http.Response response = await httpClient.getRequest(
       "/dashboard/management/",
