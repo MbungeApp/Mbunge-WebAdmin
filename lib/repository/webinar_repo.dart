@@ -48,9 +48,7 @@ class WebinarRepo {
     );
     if (response != null) {
       if (!response.body.toString().contains("null")) {
-        final webinars =
-            json.decode(response.body).map((x) => WebinarModel.fromJson(x));
-        return webinars;
+       return WebinarModel.fromJson(json.decode(response.body));
       } else {
         return null;
       }

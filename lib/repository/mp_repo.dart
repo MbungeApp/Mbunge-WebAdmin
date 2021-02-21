@@ -48,9 +48,8 @@ class MpRepo {
       "/dashboard/mp/edit/$id",
       editMpModel.toJson(),
     );
-     if (response != null && response.statusCode == 200) {
-      final mps = json.decode(response.body).map((x) => MpModel.fromJson(x));
-      return mps;
+    if (response != null && response.statusCode == 200) {
+      return MpModel.fromJson(json.decode(response.body));
     } else if (response.statusCode == 404) {
       throw NetworkException();
     } else {
