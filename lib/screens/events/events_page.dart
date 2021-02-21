@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,9 @@ import 'package:mbungeweb/widgets/loading.dart';
 import 'package:mbungeweb/widgets/scroll_bar.dart';
 
 import 'widgets/event_item.dart';
+
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class EventsPage extends StatefulWidget {
   @override
@@ -240,26 +244,41 @@ class _EventsPageState extends State<EventsPage>
                     // displayPersistentBottomSheet();
                   },
                 ),
-                SizedBox(width: 10),
-                MaterialButton(
-                  elevation: 0.0,
-                  color: Colors.teal,
-                  hoverColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    side: BorderSide(color: Colors.teal),
-                  ),
-                  child: Text(
-                    "Export",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Test()));
-                  },
-                ),
+                // SizedBox(width: 10),
+                // MaterialButton(
+                //   elevation: 0.0,
+                //   color: Colors.teal,
+                //   hoverColor: Colors.white,
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(5),
+                //     side: BorderSide(color: Colors.teal),
+                //   ),
+                //   child: Text(
+                //     "Export",
+                //     style: TextStyle(
+                //       fontWeight: FontWeight.normal,
+                //     ),
+                //   ),
+                //   onPressed: () async {
+                //     final pdf = pw.Document();
+                //     pdf.addPage(
+                //       pw.Page(
+                //         pageFormat: PdfPageFormat.a4,
+                //         build: (pw.Context context) {
+                //           return pw.Center(
+                //             child: pw.Text("Hello World"),
+                //           ); // Center
+                //         },
+                //       ),
+                //     );
+                //     var bytes = await pdf.save();
+                //     final file = File(bytes, "example.pdf");
+
+                //     debugPrint(file.relativePath);
+                //     // Navigator.push(context,
+                //     //     MaterialPageRoute(builder: (context) => Test()));
+                //   },
+                // ),
               ],
             ),
           ),
