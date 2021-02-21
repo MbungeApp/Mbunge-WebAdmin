@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mbungeweb/cubit/login/login_cubit.dart';
-import 'package:mbungeweb/models/home_navigation.dart';
-import 'package:mbungeweb/models/user_model.dart';
-import 'package:mbungeweb/utils/routes.dart';
+import 'package:mbungeweb/repository/_repository.dart';
+import 'package:mbungeweb/repository/shared_preference_repo.dart';
+import 'package:mbungeweb/widgets/loading.dart';
+import 'package:mbungeweb/widgets/restart_widget.dart';
 import 'package:mbungeweb/widgets/toast.dart';
 
 class LoginPage extends StatefulWidget {
-  final LoginCubit loginCubit;
-
-  const LoginPage({Key key, @required this.loginCubit}) : super(key: key);
+  const LoginPage({
+    Key key,
+  }) : super(key: key);
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -19,19 +20,28 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController;
   TextEditingController passwordController;
-  LoginCubit get _loginCubit => widget.loginCubit;
+  LoginCubit _loginCubit;
   bool isObscured = true;
+  ValueNotifier<bool> isLoading = ValueNotifier(false);
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
+    _loginCubit = LoginCubit(
+      sharedPreferenceRepo: SharedPreferenceRepo(),
+      adminRepo: AdminRepo(),
+    );
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    isLoading.addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    isLoading?.dispose();
     emailController?.dispose();
     passwordController?.dispose();
     super.dispose();
@@ -43,29 +53,24 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener(
       cubit: _loginCubit,
       listener: (context, state) {
-        if (state is UserLoggedOut) {
-          // navigate to login page
-          Navigator.popAndPushNamed(
-            context,
-            AppRouter.loginRoute,
-            arguments: [_loginCubit],
-          );
-        }
         if (state is UserLoggedIn) {
-          String token = state.token;
-          UserModel userModel = state.userModel;
+          isLoading.value = false;
+          print("++++++++++++ success ++++++++++");
+          RestartWidget.restartApp(context);
+
           // navigate home
-          Navigator.popAndPushNamed(
-            context,
-            AppRouter.homeRoute,
-            arguments: HomeNavigationModel(
-              token,
-              userModel,
-              _loginCubit,
-            ),
-          );
+          // Navigator.popAndPushNamed(
+          //   context,
+          //   AppRouter.homeRoute,
+          //   arguments: HomeNavigationModel(
+          //     token,
+          //     userModel,
+          //     _loginCubit,
+          //   ),
+          // );
         }
         if (state is LoginError) {
+          isLoading.value = false;
           CustomToast.showToast(
             message: "${state.message}",
             type: Types.error,
@@ -141,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: BorderSide(),
                                   ),
-                                  suffix: GestureDetector(
+                                  suffixIcon: GestureDetector(
                                     child: Icon(
                                       isObscured
                                           ? Icons.visibility
@@ -167,22 +172,26 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               SizedBox(height: 25),
                               CupertinoButton.filled(
-                                child: Text("login"),
+                                child: isLoading.value
+                                    ? ButtonLoader()
+                                    : Text("login"),
                                 borderRadius: BorderRadius.circular(30),
                                 onPressed: () {
                                   if (_formKey.currentState.validate()) {
                                     _formKey.currentState.save();
+                                    isLoading.value = true;
+
+                                    print(
+                                      "Email: ${emailController.text}",
+                                    );
+                                    print(
+                                      "Password: ${passwordController.text}",
+                                    );
+                                    _loginCubit.loginUser(
+                                      emailController.text,
+                                      passwordController.text,
+                                    );
                                   }
-                                  print(
-                                    "Email: ${emailController.text}",
-                                  );
-                                  print(
-                                    "Password: ${passwordController.text}",
-                                  );
-                                  _loginCubit.loginUser(
-                                    emailController.text,
-                                    passwordController.text,
-                                  );
                                 },
                               ),
                               SizedBox(height: 5),

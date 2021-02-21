@@ -194,7 +194,7 @@ class _AddWebinarPageState extends State<AddWebinarPage> {
                                         ),
                                         validator: (value) {
                                           if (value == null) {
-                                            return "Guest cannot be null";
+                                            return "Duration cannot be null";
                                           } else if (!isNumeric(value)) {
                                             return "Only numeric value allowed";
                                           }

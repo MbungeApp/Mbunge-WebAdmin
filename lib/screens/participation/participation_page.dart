@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:mbungeweb/cubit/webinar/webinar_cubit.dart';
 import 'package:mbungeweb/models/webinar.dart';
 import 'package:mbungeweb/repository/_repository.dart';
+import 'package:mbungeweb/screens/participation/widgets/edit_webinar_page.dart';
 import 'package:mbungeweb/widgets/activity_overlay.dart';
 import 'package:mbungeweb/widgets/error.dart';
 import 'package:mbungeweb/widgets/loading.dart';
@@ -195,8 +197,12 @@ class _ParticipationPageState extends State<ParticipationPage>
                           DataCell(Text("${webinars[i].hostedBy}")),
                           DataCell(Text("${webinars[i].duration}")),
                           DataCell(Text("${webinars[i].postponed}")),
-                          DataCell(Text("${webinars[i].scheduleAt}")),
-                          DataCell(Text("${webinars[i].createdAt}")),
+                          DataCell(Text(
+                            "${DateFormat.yMEd().format(webinars[i].scheduleAt ?? DateTime.now())}",
+                          )),
+                          DataCell(Text(
+                            "${DateFormat.yMEd().format(webinars[i].createdAt ?? DateTime.now())}",
+                          )),
                           DataCell(
                             PopupMenuButton(
                               icon: Icon(Icons.more_vert),
@@ -206,6 +212,14 @@ class _ParticipationPageState extends State<ParticipationPage>
                                     value: 'edit',
                                     child: Text("Edit Webinar"),
                                   ),
+                                  // PopupMenuItem(
+                                  //   value: 'reschedule',
+                                  //   child: Text("Reschedule Webinar"),
+                                  // ),
+                                  // PopupMenuItem(
+                                  //   value: 'postponed',
+                                  //   child: Text("Postponed Webinar"),
+                                  // ),
                                   PopupMenuItem(
                                     value: 'delete',
                                     child: Text("Delete Webinar"),
@@ -219,7 +233,15 @@ class _ParticipationPageState extends State<ParticipationPage>
                               onSelected: (myValue) {
                                 switch (myValue) {
                                   case 'edit':
-                                    debugPrint("Goes to about page");
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return EditWebinarPage(
+                                          webinarCubit: _webinarCubit,
+                                          webinarModel: webinars[i],
+                                        );
+                                      },
+                                    );
                                     break;
                                   case 'delete':
                                     _webinarCubit.deleteWebinar(webinars[i].id);
@@ -312,35 +334,32 @@ class _ParticipationPageState extends State<ParticipationPage>
                     }
                   },
                 ),
-                SizedBox(width: 10),
-                MaterialButton(
-                  elevation: 0.0,
-                  color: Colors.teal,
-                  hoverColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    side: BorderSide(color: Colors.teal),
-                  ),
-                  child: Text(
-                    "Export",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  onPressed: () {},
-                ),
+                // SizedBox(width: 10),
+                // MaterialButton(
+                //   elevation: 0.0,
+                //   color: Colors.teal,
+                //   hoverColor: Colors.white,
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(5),
+                //     side: BorderSide(color: Colors.teal),
+                //   ),
+                //   child: Text(
+                //     "Export",
+                //     style: TextStyle(
+                //       fontWeight: FontWeight.normal,
+                //     ),
+                //   ),
+                //   onPressed: () {},
+                // ),
               ],
             ),
           ),
         ),
         SizedBox(width: 20),
         IconButton(
-          icon: Icon(
-            Icons.download_rounded,
-          ),
+          icon: SizedBox(),
           onPressed: () {},
         ),
-        SizedBox(width: 20),
       ],
     );
   }

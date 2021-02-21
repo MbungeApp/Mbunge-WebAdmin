@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:mbungeweb/cubit/mp/mp_cubit.dart';
 import 'package:mbungeweb/models/mp_model.dart';
 
+import 'edit_mp.dart';
+
 class MpItem extends StatelessWidget {
   const MpItem({
     Key key,
@@ -72,7 +74,17 @@ class MpItem extends StatelessWidget {
                   SizedBox(width: 10),
                   TextButton.icon(
                     icon: Icon(Icons.edit),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return EditMpPage(
+                            mp: mp,
+                            mpCubit: mpCubit,
+                          );
+                        },
+                      );
+                    },
                     label: Text(
                       "Edit",
                       style: TextStyle(color: Colors.blue),

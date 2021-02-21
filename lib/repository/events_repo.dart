@@ -47,10 +47,10 @@ class EventsRepo {
 
   // 3. Edit an event
   // that takes a key and a value
-  Future<EventModel> editEvent(String key, String value) async {
+  Future<EventModel> editEvent(String id, EditEventModel editEventModel) async {
     http.Response response = await httpClient.postRequest(
-      "/dashboard/event/add",
-      json.decode("{$key:$value}"),
+      "/dashboard/event/edit/$id",
+      editEventModel.toJson(),
     );
     if (response != null && response.statusCode == 200) {
       final event = EventModel.fromJson(json.decode(response.body));

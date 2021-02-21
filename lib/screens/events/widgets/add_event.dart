@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbungeweb/cubit/Events/events_cubit.dart';
 import 'package:mbungeweb/models/add_event.dart';
 import 'package:mbungeweb/utils/asset_picker.dart';
+import 'package:mbungeweb/widgets/loading.dart';
 
 class AddEventPage extends StatefulWidget {
   const AddEventPage({
@@ -27,6 +28,7 @@ class _AddEventState extends State<AddEventPage> {
   AnimationController get _animationController => widget.controller;
   EventsCubit get _eventsCubit => widget.eventsCubit;
   AddEventModel addEventModel = AddEventModel();
+  ValueNotifier<bool> isLoading = ValueNotifier(false);
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -36,6 +38,9 @@ class _AddEventState extends State<AddEventPage> {
       ..addListener(() {
         if (mounted) setState(() {});
       });
+    isLoading.addListener(() {
+      setState(() {});
+    });
     _nameController = TextEditingController();
     _pictureController = TextEditingController();
     _bodyController = TextEditingController();
@@ -48,6 +53,7 @@ class _AddEventState extends State<AddEventPage> {
     _nameController?.dispose();
     _pictureController?.dispose();
     _bodyController?.dispose();
+    isLoading?.dispose();
     super.dispose();
   }
 
@@ -79,36 +85,36 @@ class _AddEventState extends State<AddEventPage> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Please enter Event/News details",
-                                style: theme.textTheme.subtitle1
-                                    .copyWith(fontWeight: FontWeight.w600),
-                              ),
-                              TextButton(
-                                child: Text(
-                                  "Cancel",
-                                  style: TextStyle(
-                                    color: Colors.red.withOpacity(0.8),
-                                  ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Please enter Event/News details",
+                              style: theme.textTheme.subtitle1
+                                  .copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            TextButton(
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(
+                                  color: Colors.red.withOpacity(0.8),
                                 ),
-                                onPressed: () {
-                                  widget.close();
-                                },
-                              )
-                            ],
-                          ),
-                          Flexible(
-                            child: SingleChildScrollView(
-                              physics: AlwaysScrollableScrollPhysics(),
+                              ),
+                              onPressed: () {
+                                widget.close();
+                              },
+                            )
+                          ],
+                        ),
+                        Flexible(
+                          child: SingleChildScrollView(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            child: Form(
+                              key: _formKey,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -171,6 +177,7 @@ class _AddEventState extends State<AddEventPage> {
                                       ),
                                     ),
                                     validator: (value) {
+                                      print("called: $value");
                                       if (value == null) {
                                         return "Input cannot be null";
                                       }
@@ -187,19 +194,21 @@ class _AddEventState extends State<AddEventPage> {
                                       height: 38,
                                       decoration: BoxDecoration(
                                         color: Colors.teal,
-                                        borderRadius:
-                                            BorderRadius.circular(5),
+                                        borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Center(
-                                        child: Text(
-                                          "Add",
-                                          style:
-                                              TextStyle(color: Colors.white),
-                                        ),
+                                        child: isLoading.value
+                                            ? ButtonLoader()
+                                            : Text(
+                                                "Add",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
                                       ),
                                     ),
                                     onTap: () {
                                       if (_formKey.currentState.validate()) {
+                                        isLoading.value = true;
                                         _formKey.currentState.save();
                                         _eventsCubit.addAnEvent(
                                           model: addEventModel,
@@ -214,8 +223,8 @@ class _AddEventState extends State<AddEventPage> {
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

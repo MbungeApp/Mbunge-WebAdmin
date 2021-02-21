@@ -1,5 +1,8 @@
 import 'package:agora/agora_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mbungeweb/cubit/webinar_questions/webinarquestions_cubit.dart';
+import 'package:mbungeweb/repository/_repository.dart';
 import 'package:mbungeweb/utils/agora.dart';
 
 enum AgoraState {
@@ -48,14 +51,19 @@ class _LivestreamPageState extends State<LivestreamPage> {
 
   @override
   void dispose() {
+    if (agoraState == AgoraState.joined) {
+      _agoraClient.leaveChannel();
+    }
     isJoined.dispose();
+
     agoraState = AgoraState.not_joined;
-    _agoraClient.leaveChannel();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -96,8 +104,90 @@ class _LivestreamPageState extends State<LivestreamPage> {
           Flexible(
             flex: 3,
             child: Container(
-              color: Colors.red,
-              child: Center(),
+              color: Colors.white,
+              child: BlocProvider(
+                create: (context) {
+                  WebinarquestionsCubit webinarquestionsCubit =
+                      WebinarquestionsCubit(
+                    webinarRepo: WebinarRepo(),
+                  );
+                  webinarquestionsCubit.fetchQuestions(_webinarId);
+                  webinarquestionsCubit.streamChanges(_webinarId);
+                  return webinarquestionsCubit;
+                },
+                child:
+                    BlocConsumer<WebinarquestionsCubit, WebinarquestionsState>(
+                  listener: (context, state) {
+                    // TODO: implement listener
+                  },
+                  builder: (context, state) {
+                    if (state is WebinarquestionsInitial) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1.5,
+                        ),
+                      );
+                    }
+                    if (state is WebinarquestionsError) {
+                      return Center(child: Text("An error occured"));
+                    }
+                    if (state is WebinarquestionsSuccess) {
+                      final questions = state.questions;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 10.0,
+                              right: 15.0,
+                              left: 15.0,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Questions",
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                                Spacer(),
+                                IconButton(
+                                  icon: Icon(Icons.replay_outlined),
+                                  onPressed: () {
+                                    BlocProvider.of<WebinarquestionsCubit>(
+                                            context)
+                                        .fetchQuestions(
+                                      _webinarId,
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                          questions != null || questions.isNotEmpty
+                              ? SizedBox(
+                                  height: size.height * 0.85,
+                                  width: size.width * 0.28,
+                                  child: ListView.builder(
+                                    itemCount: questions.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        leading: CircleAvatar(
+                                          child: Icon(Icons.person),
+                                        ),
+                                        title: Text(
+                                            "${questions[index].user.firstName} ${questions[index].user.lastName}"),
+                                        subtitle: Text(questions[index].body),
+                                      );
+                                    },
+                                  ),
+                                )
+                              : Center(child: Text("No questions")),
+                        ],
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+              ),
             ),
           )
         ],

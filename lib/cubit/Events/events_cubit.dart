@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mbungeweb/models/add_event.dart';
+import 'package:mbungeweb/models/edit_event.dart';
 import 'package:mbungeweb/models/event.dart';
 import 'package:mbungeweb/repository/_repository.dart';
 import 'package:mbungeweb/utils/logger.dart';
@@ -29,6 +30,7 @@ class EventsCubit extends Cubit<EventsState> {
         ));
       }
     } catch (e) {
+      AppLogger.logWTF(e.toString());
       emit(EventsError(message: e.toString()));
     }
   }
@@ -73,9 +75,54 @@ class EventsCubit extends Cubit<EventsState> {
     }
   }
 
+  Future<void> editEvent(String id, EditEventModel editEventModel) async {
+    final currentState = state;
+    if (currentState is EventsSuccess) {
+      final events = currentState.events;
+      int indexToRemove = events.indexWhere(
+            (element) => element.id == id,
+          ) ??
+          null;
+      try {
+        EventModel eventModel = await eventsRepo.editEvent(
+          id,
+          editEventModel,
+        );
+        if (indexToRemove != null) {
+          if (eventModel != null) {
+            events.removeAt(indexToRemove);
+            events.insert(indexToRemove, eventModel);
+            emit(EventsSuccess(
+              events: events,
+              eventActionState: EventActionState(
+                isSuccess: true,
+                message: "Edited Event",
+              ),
+            ));
+          } else {
+            emit(EventsSuccess(
+              events: events,
+              eventActionState: EventActionState(
+                isSuccess: false,
+                message: "Unable to edit event",
+              ),
+            ));
+          }
+        }
+      } catch (e) {
+        emit(EventsSuccess(
+          events: events,
+          eventActionState: EventActionState(
+            isSuccess: false,
+            message: e.toString(),
+          ),
+        ));
+      }
+    }
+  }
+
   Future<void> addAnEvent({
     @required AddEventModel model,
-    
     @required Uint8List imageBytes,
   }) async {
     final currentState = state;

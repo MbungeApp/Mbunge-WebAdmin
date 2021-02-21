@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mbungeweb/cubit/login/login_cubit.dart';
 import 'package:mbungeweb/cubit/observer.dart';
-import 'package:mbungeweb/models/home_navigation.dart';
-import 'package:mbungeweb/repository/_repository.dart';
-import 'package:mbungeweb/repository/shared_preference_repo.dart';
-import 'package:mbungeweb/screens/decision.dart';
 // import 'package:mbungeweb/screens/account/login_page.dart';
-import 'package:mbungeweb/screens/home/home_page.dart';
 import 'package:mbungeweb/utils/colors.dart';
-import 'package:mbungeweb/utils/logger.dart';
 import 'package:mbungeweb/utils/routes.dart';
-import 'package:mbungeweb/widgets/toast.dart';
+import 'package:mbungeweb/widgets/restart_widget.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:statsfl/statsfl.dart';
 
-import 'models/user_model.dart';
+import 'screens/decision.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +18,7 @@ void main() {
     StatsFl(
       isEnabled: false,
       maxFps: 120,
-      child: MyApp(),
+      child: RestartWidget(child: MyApp()),
     ),
   );
 }
@@ -39,11 +32,6 @@ class _MyAppState extends State<MyApp> {
   LoginCubit loginCubit;
   @override
   void initState() {
-    loginCubit = LoginCubit(
-      sharedPreferenceRepo: SharedPreferenceRepo(),
-      adminRepo: AdminRepo(),
-    );
-    loginCubit.isUserLoggedIn();
     super.initState();
   }
 
@@ -74,9 +62,7 @@ class _MyAppState extends State<MyApp> {
             background: Container(color: Color(0xFFF5F5F5)),
           );
         },
-        home: DecisionPage(
-          loginCubit: loginCubit,
-        ),
+        home: DecisionPage(),
       ),
     );
   }

@@ -42,6 +42,21 @@ class MpRepo {
     }
   }
 
+  ///dashboard/mp/edit/603110589ba215d1cbd8b58a
+  Future<MpModel> editMp(String id, EditMpModel editMpModel) async {
+    http.Response response = await httpClient.postRequest(
+      "/dashboard/mp/edit/$id",
+      editMpModel.toJson(),
+    );
+    if (response != null && response.statusCode == 200) {
+      return MpModel.fromJson(json.decode(response.body));
+    } else if (response.statusCode == 404) {
+      throw NetworkException();
+    } else {
+      return null;
+    }
+  }
+
   Future<String> deleteMp(String mpId) async {
     http.Response response = await httpClient.deleteRequest(
       "/dashboard/mp/delete/$mpId",

@@ -161,6 +161,32 @@ class _AddMpPageState extends State<AddMpPage> {
                                         alignment: Alignment.centerLeft,
                                         child: Text("County"),
                                       ),
+                                      // DropdownButtonFormField(
+                                      //   value: county,
+                                      //   hint: Text("Select county"),
+                                      //   items: AppConstants.counties
+                                      //       .map((String value) {
+                                      //     return DropdownMenuItem<String>(
+                                      //       value: value,
+                                      //       child: Text(
+                                      //         value,
+                                      //       ),
+                                      //     );
+                                      //   }).toList(),
+                                      //   onChanged: (String value) {
+                                      //     setState(() {
+                                      //       county = value;
+                                      //     });
+                                      //   },
+                                      //   onSaved: (value) {
+                                      //     addMpModel.county = value;
+                                      //   },
+                                      //   decoration: InputDecoration(
+                                      //     border: OutlineInputBorder(
+                                      //       borderSide: BorderSide(),
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       // TextFormField(
                                       //   decoration: InputDecoration(
                                       //     border: OutlineInputBorder(
@@ -177,27 +203,40 @@ class _AddMpPageState extends State<AddMpPage> {
                                       //     addMpModel.county = value;
                                       //   },
                                       // ),
-                                      ListView.builder(
-                                        itemCount: AppConstants.counties.length,
-                                        itemBuilder: (context, index) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              county =
-                                                  AppConstants.counties[index];
-                                            },
-                                            child: Chip(
-                                              backgroundColor: county ==
-                                                      AppConstants
-                                                          .counties[index]
-                                                  ? theme.primaryColor
-                                                  : theme.chipTheme
-                                                      .backgroundColor,
-                                              label: Text(
-                                                AppConstants.counties[index],
+                                      SizedBox(
+                                        height: 60,
+                                        child: ListView.builder(
+                                          itemCount:
+                                              AppConstants.counties.length,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 5.0,
                                               ),
-                                            ),
-                                          );
-                                        },
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    county = AppConstants
+                                                        .counties[index];
+                                                  });
+                                                },
+                                                child: Chip(
+                                                  backgroundColor: county ==
+                                                          AppConstants
+                                                              .counties[index]
+                                                      ? theme.primaryColor
+                                                      : theme.chipTheme
+                                                          .backgroundColor,
+                                                  label: Text(
+                                                    AppConstants
+                                                        .counties[index],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
                                       SizedBox(height: 10),
                                       Align(
@@ -316,7 +355,7 @@ class _AddMpPageState extends State<AddMpPage> {
                                                   BorderRadius.circular(
                                                 25,
                                               ),
-                                              child: InkWell(
+                                              child: GestureDetector(
                                                 onTap: () {
                                                   setState(() {
                                                     status = role;
