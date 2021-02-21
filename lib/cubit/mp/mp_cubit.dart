@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mbungeweb/cubit/observer.dart';
 import 'package:mbungeweb/models/add_mp.dart';
+import 'package:mbungeweb/models/edit_mp.dart';
 import 'package:mbungeweb/models/mp_model.dart';
 import 'package:mbungeweb/repository/_repository.dart';
 
@@ -83,6 +84,52 @@ class MpCubit extends Cubit<MpState> {
           );
         }
       } catch (e) {}
+    }
+  }
+
+  Future<void> editMp(String id, EditMpModel editMpModel) async {
+    final currentState = state;
+    if (currentState is MpSuccess) {
+      final mps = currentState.mps;
+      int indexToRemove = mps.indexWhere(
+            (element) => element.id == id,
+          ) ??
+          null;
+      try {
+        MpModel mpModel = await mpRepo.editMp(
+          id,
+          editMpModel,
+        );
+        if (indexToRemove != null) {
+          if (mpModel != null) {
+            mps.removeAt(indexToRemove);
+            mps.insert(indexToRemove, mpModel);
+            emit(MpSuccess(
+              mps: mps,
+              actionState: ActionState(
+                "Edited Mp",
+                true,
+              ),
+            ));
+          } else {
+            emit(MpSuccess(
+              mps: mps,
+              actionState: ActionState(
+                "Unable to edit mp",
+                false,
+              ),
+            ));
+          }
+        }
+      } catch (e) {
+        emit(MpSuccess(
+          mps: mps,
+          actionState: ActionState(
+            e.toString(),
+            false,
+          ),
+        ));
+      }
     }
   }
 }
