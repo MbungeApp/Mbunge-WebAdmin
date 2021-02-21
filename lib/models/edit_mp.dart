@@ -41,7 +41,7 @@ class EditMpModel {
         "bio": bio,
         "constituency": constituency,
         "county": county,
-        "date_of_birth": dateOfBirth.toIso8601String(),
+        "date_of_birth": dateOfBirth.toIso8601String() + "Z",
         "picture": picture,
         "martial_status": martialStatus,
         "name": name,
