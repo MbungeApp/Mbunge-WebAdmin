@@ -17,8 +17,8 @@ import 'package:mbungeweb/widgets/scroll_bar.dart';
 
 import 'widgets/event_item.dart';
 
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
+// import 'package:pdf/pdf.dart';
+// import 'package:pdf/widgets.dart' as pw;
 
 class EventsPage extends StatefulWidget {
   @override

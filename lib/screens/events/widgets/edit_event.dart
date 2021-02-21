@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,6 +6,7 @@ import 'package:mbungeweb/models/edit_event.dart';
 import 'package:mbungeweb/models/event.dart';
 import 'package:mbungeweb/utils/logger.dart';
 import 'package:mbungeweb/widgets/loading.dart';
+import 'package:mbungeweb/widgets/scroll_bar.dart';
 import 'package:mbungeweb/widgets/toast.dart';
 
 class EditEventPage extends StatefulWidget {
@@ -26,6 +26,7 @@ class _EditEventPageState extends State<EditEventPage> {
   ValueNotifier<bool> isLoading = ValueNotifier(false);
   EditEventModel editEventModel = EditEventModel();
   final _formKey = GlobalKey<FormState>();
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _EditEventPageState extends State<EditEventPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return BlocListener(
       cubit: widget.eventsCubit,
       listener: (context, state) {
@@ -54,102 +56,136 @@ class _EditEventPageState extends State<EditEventPage> {
         }
       },
       child: AlertDialog(
-        title: Text("Edit Event"),
-        content: Stack(
-          clipBehavior: Clip.none,
-          children: <Widget>[
-            Positioned(
-              right: -40.0,
-              top: -40.0,
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: CircleAvatar(
-                  child: Icon(Icons.close),
-                  backgroundColor: Colors.red,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Edit Event"),
+            TextButton.icon(
+              label: Text("Close"),
+              icon: Icon(Icons.close),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+        content: SizedBox(
+          width: size.width * 0.4,
+          height: size.height * 0.7,
+          child: Form(
+            key: _formKey,
+            child: ScrollbarListStack(
+              controller: scrollController,
+              barSize: 10,
+              axis: Axis.vertical,
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      "Event Name",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 0,
+                        vertical: 8,
+                      ),
+                      child: TextFormField(
+                        maxLines: null,
+                        initialValue: widget.eventModel.name,
+                        decoration: InputDecoration(
+                          hintText: "Event Name",
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(),
+                          ),
+                        ),
+                        onSaved: (String value) {
+                          editEventModel.name = value;
+                          // medication.name = value;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "Event Picture",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 0,
+                        vertical: 8,
+                      ),
+                      child: TextFormField(
+                        enabled: false,
+                        maxLines: null,
+                        initialValue: widget.eventModel.picture,
+                        decoration: InputDecoration(
+                          hintText: "Event Picture",
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(),
+                          ),
+                        ),
+                        onSaved: (String value) {
+                          // medication.name = value;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "Event Body",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 0,
+                        vertical: 8,
+                      ),
+                      child: TextFormField(
+                        maxLines: null,
+                        initialValue: widget.eventModel.body,
+                        decoration: InputDecoration(
+                          hintText: "Event Body",
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(),
+                          ),
+                        ),
+                        onSaved: (String value) {
+                          editEventModel.body = value;
+                          // medication.prescription = value;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        child: isLoading.value ? ButtonLoader() : Text("Edit"),
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+                            isLoading.value = true;
+                            editEventModel.picture = widget.eventModel.picture;
+
+                            AppLogger.logDebug(
+                                editEventModel.toJson().toString());
+                            widget.eventsCubit.editEvent(
+                              widget.eventModel.id,
+                              editEventModel,
+                            );
+                          }
+                        },
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
-            Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 0,
-                      vertical: 8,
-                    ),
-                    child: TextFormField(
-                      maxLines: null,
-                      initialValue: widget.eventModel.name,
-                      decoration: InputDecoration(
-                        hintText: "Event Name",
-                      ),
-                      onSaved: (String value) {
-                        editEventModel.name = value;
-                        // medication.name = value;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 0,
-                      vertical: 8,
-                    ),
-                    child: TextFormField(
-                      enabled: false,
-                      initialValue: widget.eventModel.picture,
-                      decoration: InputDecoration(
-                        hintText: "Event Picture",
-                      ),
-                      onSaved: (String value) {
-                        // medication.name = value;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 0,
-                      vertical: 8,
-                    ),
-                    child: TextFormField(
-                      maxLines: null,
-                      initialValue: widget.eventModel.body,
-                      decoration: InputDecoration(
-                        hintText: "Event Body",
-                      ),
-                      onSaved: (String value) {
-                        editEventModel.body = value;
-                        // medication.prescription = value;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      child: isLoading.value ? ButtonLoader() : Text("Edit"),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          _formKey.currentState.save();
-                          isLoading.value = true;
-                          editEventModel.picture = widget.eventModel.picture;
-
-                          AppLogger.logDebug(
-                              editEventModel.toJson().toString());
-                          widget.eventsCubit.editEvent(
-                            widget.eventModel.id,
-                            editEventModel,
-                          );
-                        }
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
