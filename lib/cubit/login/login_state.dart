@@ -10,19 +10,18 @@ abstract class LoginState extends Equatable {
 class LoginInitial extends LoginState {}
 
 class UserLoggedIn extends LoginState {
-  final UserModel userModel;
-  final String token;
+  // final UserModel userModel;
+  // final String token;
 
-  UserLoggedIn({
-    @required this.userModel,
-    @required this.token,
-  });
+  // UserLoggedIn({
+  //   @required this.userModel,
+  //   @required this.token,
+  // });
 
-  @override
-  List<Object> get props => [userModel,token];
+  // @override
+  // List<Object> get props => [userModel,token];
 }
 
-class UserLoggedOut extends LoginState {}
 
 class LoginError extends LoginState {
   final String message;
