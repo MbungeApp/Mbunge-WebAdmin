@@ -164,24 +164,27 @@ class _DashboardPageState extends State<DashboardPage> {
                         backgroundColor: Colors.pink,
                       ),
                       SizedBox(width: 5),
-                      Text("Female"),
+                      Text("Female: ${metrics.genderRation.female}"),
                       SizedBox(width: 20),
                       CircleAvatar(
                         radius: 5,
                         backgroundColor: Colors.blue,
                       ),
                       SizedBox(width: 5),
-                      Text("Male"),
+                      Text("Male: ${metrics.genderRation.male}"),
                     ],
                   ),
                 )
               ],
             ),
           ),
+         
           ResponsiveRowColumnItem(
             rowFlex: 8,
             rowFit: FlexFit.tight,
-            child: DrawMap(),
+            child: DrawMap(
+              location: metrics.usersLocation
+            ),
           ),
         ],
       ),
