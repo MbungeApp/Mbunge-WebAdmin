@@ -2,28 +2,46 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:mbungeweb/utils/logger.dart';
+import 'package:mbungeweb/models/metrics.dart';
 
 class DrawMap extends StatefulWidget {
+  final List<UsersLocation> location;
+
+  const DrawMap({Key key, @required this.location}) : super(key: key);
   @override
   _DrawMapState createState() => _DrawMapState();
 }
 
 class _DrawMapState extends State<DrawMap> {
   Completer<GoogleMapController> _controller = Completer();
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  int _markerIdCounter = 1;
   static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    target: LatLng(0.0236, 37.9062),
+    zoom: 7.0,
   );
+  List<UsersLocation> get _location => widget.location;
 
-  // MapboxMapController mapController;
+  void _add(
+    LatLng latLng,
+    String name,
+  ) {
+    final String markerIdVal = 'marker_id_$_markerIdCounter';
+    _markerIdCounter++;
+    final MarkerId markerId = MarkerId(markerIdVal);
 
-  // List<String> _styleStringLabels = [
-  //   "MAPBOX_STREETS",
-  //   "SATELLITE",
-  //   "LOCAL_ASSET"
-  // ];
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: latLng,
+      infoWindow: InfoWindow(title: "Name: $name", snippet: '*'),
+      onTap: () {},
+      onDragEnd: (LatLng position) {},
+    );
+
+    setState(() {
+      markers[markerId] = marker;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +65,26 @@ class _DrawMapState extends State<DrawMap> {
         Card(
           child: SizedBox(
             width: double.infinity,
-            height: 650,
+            height: 720,
             child: GoogleMap(
-              mapType: MapType.hybrid,
+              zoomGesturesEnabled: false,
+              mapType: MapType.normal,
               initialCameraPosition: _kGooglePlex,
+              markers: Set<Marker>.of(markers.values),
               onMapCreated: (GoogleMapController controller) {
-                // AppLogger.logVerbose("Map created");
                 _controller.complete(controller);
+                debugPrint("######### add markers ############");
+                if (_location.isNotEmpty || _location != null) {
+                  _location.forEach((loc) {
+                    // LatLng latLng = LatLng(loc.latitude, loc.longitude);
+                    LatLng latLng = LatLng(loc.longitude, loc.latitude);
+
+                    _add(
+                      latLng,
+                      loc.name,
+                    );
+                  });
+                }
               },
             ),
             // MapboxMap(
