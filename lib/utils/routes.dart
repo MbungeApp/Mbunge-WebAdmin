@@ -14,11 +14,8 @@ class AppRouter {
 
     switch (settings.name) {
       case loginRoute:
-        List arguments = args;
         return _route(
-          LoginPage(
-            loginCubit: arguments[0],
-          ),
+          LoginPage(),
         );
         break;
       case homeRoute:
@@ -27,7 +24,6 @@ class AppRouter {
           HomePage(
             token: arguments.token,
             userModel: arguments.userModel,
-            loginCubit: arguments.loginCubit,
           ),
         );
         break;
