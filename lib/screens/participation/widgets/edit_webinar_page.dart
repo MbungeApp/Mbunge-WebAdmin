@@ -72,7 +72,7 @@ class _EditWebinarPageState extends State<EditWebinarPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Edit MP"),
+            Text("Edit Webinar"),
             TextButton.icon(
               label: Text("Close"),
               icon: Icon(Icons.close),
