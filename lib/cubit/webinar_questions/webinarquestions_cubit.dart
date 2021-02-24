@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mbungeweb/models/webinar_questions.dart';
 import 'package:mbungeweb/repository/_repository.dart';
@@ -13,14 +12,25 @@ class WebinarquestionsCubit extends Cubit<WebinarquestionsState> {
   WebinarquestionsCubit({@required this.webinarRepo})
       : super(WebinarquestionsInitial());
 
-  var channel;
-
   streamChanges(String id) {
+    HtmlWebSocketChannel channel;
     if (channel == null) {
-      channel = HtmlWebSocketChannel.connect(
-          Uri.parse('ws://api.mbungeapp.tech/api/v1/webinar/ws'));
+      try {
+        channel = HtmlWebSocketChannel.connect(
+          Uri.parse('wss://api.mbungeapp.tech/api/v1/webinar/ws'),
+        );
+        AppLogger.logDebug("Connected succesfully");
+        channel.stream.listen((message) {
+          print("new stufff");
+          AppLogger.logWTF(message);
+          fetchQuestions(id);
+        });
+      } catch (e) {
+        AppLogger.logWTF(e.toString());
+      }
     } else {
       channel.stream.listen((message) {
+        print("new stufff");
         AppLogger.logWTF(message);
         fetchQuestions(id);
       });

@@ -40,6 +40,6 @@ class EditWebinarModel {
         "description": description == null ? null : description,
         "duration": duration == null ? null : duration,
         "postponed": postponed == null ? null : postponed,
-        "schedule_at": scheduleAt == null ? null : scheduleAt.toIso8601String(),
+        "schedule_at": scheduleAt == null ? null : scheduleAt.toIso8601String() + "Z",
     };
 }

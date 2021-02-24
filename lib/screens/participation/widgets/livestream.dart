@@ -25,10 +25,16 @@ class _LivestreamPageState extends State<LivestreamPage> {
   AgoraClient _agoraClient = AgoraClient();
   String get _webinarId => widget.webinarId;
   String get _agenda => widget.agenda;
+  WebinarquestionsCubit webinarquestionsCubit;
   ValueNotifier<bool> isJoined = ValueNotifier(false);
 
   @override
   void initState() {
+    webinarquestionsCubit = WebinarquestionsCubit(
+      webinarRepo: WebinarRepo(),
+    );
+    webinarquestionsCubit.fetchQuestions(_webinarId);
+    webinarquestionsCubit.streamChanges(_webinarId);
     _agoraClient.initAgora();
     super.initState();
     isJoined.addListener(() {
@@ -78,8 +84,9 @@ class _LivestreamPageState extends State<LivestreamPage> {
       ),
       body: Row(
         children: [
-          Flexible(
-            flex: 6,
+          SizedBox(
+            width: size.width * 0.6,
+            height: size.height,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Stack(
@@ -101,18 +108,13 @@ class _LivestreamPageState extends State<LivestreamPage> {
               ),
             ),
           ),
-          Flexible(
-            flex: 3,
+          SizedBox(
+            width: size.width * 0.4,
+            height: size.height,
             child: Container(
               color: Colors.white,
               child: BlocProvider(
                 create: (context) {
-                  WebinarquestionsCubit webinarquestionsCubit =
-                      WebinarquestionsCubit(
-                    webinarRepo: WebinarRepo(),
-                  );
-                  webinarquestionsCubit.fetchQuestions(_webinarId);
-                  webinarquestionsCubit.streamChanges(_webinarId);
                   return webinarquestionsCubit;
                 },
                 child:

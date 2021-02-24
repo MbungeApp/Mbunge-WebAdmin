@@ -103,6 +103,15 @@ class _ParticipationPageState extends State<ParticipationPage>
                                 msg: state.webinarSuccessAction.message,
                               );
                             }
+                            if (state.webinarSuccessAction.message
+                                .contains("successfully")) {
+                              if (_activityOverlay.isVisible()) {
+                                _animationController.reverse().whenComplete(() {
+                                  _activityOverlay?.remove();
+                                  isActivityOpened.value = false;
+                                });
+                              }
+                            }
                           }
                         },
                         builder: (context, state) {

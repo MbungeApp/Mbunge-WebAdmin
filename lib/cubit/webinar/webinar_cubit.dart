@@ -71,6 +71,7 @@ class WebinarCubit extends Cubit<WebinarState> {
           ) ??
           null;
       try {
+        AppLogger.logWTF(editWebinarModel.toJson().toString());
         WebinarModel webinarModel = await webinarRepo.editWebinar(
           id,
           editWebinarModel,
